@@ -212,6 +212,26 @@
           "duration": 30,
           "order": 3,
           "status": "published"
+        },
+        {
+          "code": "m3-joins",
+          "title": "SQL: JOINs avanzados",
+          "objective": "Unir tablas con INNER y LEFT.",
+          "competency": "SQL avanzado",
+          "content": "INNER JOIN devuelve solo coincidencias; LEFT JOIN conserva filas sin match (NULOS). Ejemplo: ventas LEFT JOIN clientes. Error comun: unir sin clave y duplicar filas.",
+          "duration": 30,
+          "order": 4,
+          "status": "published"
+        },
+        {
+          "code": "m3-indices",
+          "title": "SQL: indices y rendimiento",
+          "objective": "Explicar indices y consultas eficientes.",
+          "competency": "SQL rendimiento",
+          "content": "Indice en columna filtrada acelera busquedas; abusar de indices frena escrituras. Usa EXPLAIN QUERY PLAN en SQLite para ver el plan. Normaliza antes de indexar.",
+          "duration": 25,
+          "order": 5,
+          "status": "published"
         }
       ]
     },
@@ -300,6 +320,16 @@
           "duration": 25,
           "order": 4,
           "status": "published"
+        },
+        {
+          "code": "m5-numpy",
+          "title": "NumPy: arrays numericos",
+          "objective": "Explicar arrays y vectorizacion.",
+          "competency": "NumPy intro",
+          "content": "Array NumPy permite operaciones vectorizadas (suma, media) sin bucles. Concepto: X.mean() es mas rapido que bucle Python. En este laboratorio practicas la logica con listas; en entorno con numpy aplicarias lo mismo.",
+          "duration": 25,
+          "order": 5,
+          "status": "published"
         }
       ]
     },
@@ -338,6 +368,16 @@
           "content": "Importa datasets/ventas_powerbi.csv en Power BI Desktop: modelo, medidas Ventas=SUM(unidades*precio), segmentador por region, grafico de barras desde 0. Storytelling: pregunta, hallazgo, recomendacion. Entrega verificable en el proyecto p3-powerbi.",
           "duration": 40,
           "order": 3,
+          "status": "published"
+        },
+        {
+          "code": "m6-tiempo",
+          "title": "Power BI: inteligencia de tiempo",
+          "objective": "Crear medidas con fechas.",
+          "competency": "BI tiempo",
+          "content": "Con ventas_powerbi.csv: medida Ventas Mes = CALCULATE(SUM(unidades*precio), DATESMTD(fechas)). Requiere tabla calendario. Verificas meses con el dataset de muestra.",
+          "duration": 30,
+          "order": 4,
           "status": "published"
         }
       ]
@@ -525,6 +565,26 @@
           "duration": 45,
           "order": 4,
           "status": "published"
+        },
+        {
+          "code": "m10-metricas",
+          "title": "ML: métricas y validación",
+          "objective": "Evaluar un clasificador (precisión, recall, F1).",
+          "competency": "Evaluación ML",
+          "content": "Confusión: VP, FP, FN, VN. Precisión = VP/(VP+FP); recall = VP/(VP+FN). F1 equilibra ambas. Validación cruzada reduce varianza de la estimación. El lab ML calcula regresión; aquí interpretas métricas en proyectos.",
+          "duration": 30,
+          "order": 5,
+          "status": "published"
+        },
+        {
+          "code": "m10-clustering",
+          "title": "ML: clustering y PCA (concepto)",
+          "objective": "Explicar clustering y PCA.",
+          "competency": "ML no supervisado",
+          "content": "Clustering agrupa sin etiquetas; PCA reduce dimensiones maximizando varianza. Pregunta clave: ¿las variables escaladas afectan el resultado? Documenta supuestos antes de sklearn.",
+          "duration": 25,
+          "order": 6,
+          "status": "published"
         }
       ]
     }
@@ -706,6 +766,32 @@
         "Secreta"
       ],
       "answer": "Trazable a datos y metodo",
+      "xp": 20
+    },
+    {
+      "lesson": "m3-joins",
+      "kind": "mcq",
+      "prompt": "LEFT JOIN se diferencia de INNER porque:",
+      "options": [
+        "Conserva filas sin match",
+        "Borra duplicados",
+        "Ordena siempre",
+        "No necesita clave"
+      ],
+      "answer": "Conserva filas sin match",
+      "xp": 20
+    },
+    {
+      "lesson": "m10-metricas",
+      "kind": "mcq",
+      "prompt": "F1 equilibra:",
+      "options": [
+        "Precisión y recall",
+        "Media y mediana",
+        "Train y test",
+        "a y b"
+      ],
+      "answer": "Precisión y recall",
       "xp": 20
     }
   ],
