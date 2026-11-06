@@ -88,6 +88,10 @@ class ProjectIn2(BaseModel):
     rubric: str = ""
 
 
+class AvatarIn(BaseModel):
+    avatar: str = Field(min_length=1, max_length=50)
+
+
 def current_user(token: str | None = Depends(oauth), db: Session = Depends(get_db)) -> User:
     if not token:
         raise HTTPException(401, "Token requerido")
@@ -300,6 +304,31 @@ def labs_stats(b: StatsIn):
 @router.get("/missions")
 def missions(db: Session = Depends(get_db)):
     return [{"id": m.id, "title": m.title, "description": m.description, "xp": m.xp} for m in db.query(Mission).all()]
+
+
+@router.post("/missions/{mission_id}/complete")
+def mission_complete(mission_id: int, u: User = Depends(current_user), db: Session = Depends(get_db)):
+    m = db.query(Mission).filter(Mission.id == mission_id).first()
+    if not m:
+        raise HTTPException(404, "Misión no encontrada")
+    total, _ = award_xp(db, u.id, m.xp, f"Misión: {m.title}", f"mission:{u.id}:{mission_id}")
+    return {"ok": True, "xp": total, "xp_reward": m.xp}
+
+
+@router.get("/rankings")
+def rankings(db: Session = Depends(get_db)):
+    rows = db.query(Profile).order_by(Profile.total_xp.desc()).limit(20).all()
+    return [{"xp": p.total_xp, "level": p.level} for p in rows]
+
+
+@router.post("/me/avatar")
+def avatar(b: AvatarIn, u: User = Depends(current_user), db: Session = Depends(get_db)):
+    p = db.query(Profile).filter(Profile.user_id == u.id).first()
+    if not p:
+        p = Profile(user_id=u.id); db.add(p)
+    p.avatar = b.avatar
+    db.commit()
+    return {"avatar": b.avatar}
 
 
 @router.get("/badges")

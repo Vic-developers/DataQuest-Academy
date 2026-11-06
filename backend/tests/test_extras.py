@@ -30,3 +30,9 @@ def test_ml_regression():
     assert r.status_code == 200 and r.json()["ok"] and abs(r.json()["b"] - 2.0) < 1e-6 and r.json()["mae"] == 0.0
     r = client.post("/api/v1/labs/ml/regression", json={"xs": "1", "ys": "2"})
     assert r.json()["ok"] is False
+
+
+def test_gamification_endpoints():
+    assert client.get("/api/v1/rankings").status_code == 200
+    assert client.post("/api/v1/missions/1/complete").status_code == 401  # requiere auth
+    assert client.post("/api/v1/me/avatar", json={"avatar": "avatar-1"}).status_code == 401

@@ -1,4 +1,8 @@
 # Changelog
+## [0.11.0] — Gamificación (2026-11-06)
+- Misiones completables con XP idempotente (`POST /missions/{id}/complete`), rankings anónimos (`GET /rankings`), avatar cosmético persistente (`POST /me/avatar`) + páginas `/rankings` y `/perfil`.
+- Tests: 17 passed.
+
 ## [0.10.0] — Carga avanzada (2026-11-06)
 - `scripts/loadtest_adv.py`: 90 peticiones (health/worlds/SQL), p50=20.5ms, p95=49.2ms, 100% OK en vivo.
 
