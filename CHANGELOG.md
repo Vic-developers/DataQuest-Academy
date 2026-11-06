@@ -1,4 +1,9 @@
 # Changelog
+## [0.3.0] — Lote 2 + seguridad (2026-11-06)
+- Currículo lote 2: Excel avanzado/Power Query, pandas/visualización, proyecto final ML (p5-ml) + 2 ejercicios + `datasets/iris_sintetico.csv`.
+- Seguridad: Next.js 14.2.5 → 16.4.5 (`npm audit: 0 vulnerabilidades`). Build verificado con 17 rutas.
+- `scripts/smoke_e2e.py` (auth + mundos + labs + stats) verificado en vivo.
+
 ## [0.2.0] — Fases 9-11 parcial (2026-11-06)
 - Currículo ampliado: Mundos 2, 5-10 con lecciones reales (lote 1), 4 ejercicios nuevos, 5 proyectos, misiones e insignias semilladas.
 - Laboratorio estadístico (`POST /labs/stats`), endpoints `/missions`, `/badges`, `/admin/stats`.

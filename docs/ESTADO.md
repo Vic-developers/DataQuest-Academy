@@ -21,6 +21,6 @@ git push -u origin master
 ## Pendiente (criterios no cumplidos)
 - Lotes restantes del currículo con revisión académica.
 - Editor de contenidos completo en admin.
-- E2E Playwright, carga y auditoría de accesibilidad.
-- Actualizar Next.js 14.2.5 a versión parchada antes de producción.
-- Proyecto final de Mundo 10 con modelo evaluable.
+- E2E Playwright (hoy: smoke Python + integración pytest), carga y auditoría de accesibilidad.
+- Proyecto final de Mundo 10 con modelo evaluable sobre `iris_sintetico.csv` (estructura lista, falta dataset de evaluación).
+- ✅ Next.js actualizado a 16.4.5 (`npm audit` 0) — verificado 2026-11-06.
