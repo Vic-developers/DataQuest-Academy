@@ -10,5 +10,5 @@
 8 Proyectos/certificaciones ✅ (entregas, rúbrica, PDF, verificación pública)
 9 Currículo profesional: lote 1 ✅ (Mundos 2, 5-10 con lecciones reales) — faltan lotes por tema con revisión académica.
 10 Puente DS: lote 1 ✅ (álgebra, regresión, pipeline) — falta proyecto modelo final.
-11 Admin/analítica ✅ básico ampliado (stats agregadas + misiones/insignias) — falta editor completo.
-12 Calidad: CI ✅ — faltan E2E Playwright, carga y auditoría de accesibilidad.
+11 Admin/analítica ✅ (stats + misiones/insignias + editor lecciones/ejercicios) — falta editor completo (proyectos/datasets).
+12 Calidad: CI ✅ + smoke + carga ligera ✅ + E2E integración ✅ — faltan Playwright navegador, carga avanzada y auditoría de accesibilidad.

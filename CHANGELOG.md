@@ -1,4 +1,11 @@
 # Changelog
+## [0.4.0] — Editor admin + E2E + carga (2026-11-06)
+- Editor de contenidos en `/admin`: crear lecciones/ejercicios (`POST /admin/lessons`, `POST /admin/exercises`, rol author/admin, auditoría).
+- Currículo: Mundo 3 (ventanas, CTE) + Mundo 4 (listas, funciones) + 2 ejercicios. Total: 36 lecciones, 12 ejercicios.
+- `backend/tests/test_e2e.py`: recorrido completo con promoción a autor y creación vía API.
+- `scripts/loadtest.py`: 50/50 OK en `/health`; `scripts/smoke_e2e.py` verificado en vivo.
+- Frontend admin verificado en navegador (200, estado de carga sin auth).
+
 ## [0.3.0] — Lote 2 + seguridad (2026-11-06)
 - Currículo lote 2: Excel avanzado/Power Query, pandas/visualización, proyecto final ML (p5-ml) + 2 ejercicios + `datasets/iris_sintetico.csv`.
 - Seguridad: Next.js 14.2.5 → 16.4.5 (`npm audit: 0 vulnerabilidades`). Build verificado con 17 rutas.

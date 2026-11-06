@@ -182,6 +182,26 @@
           "duration": 30,
           "order": 1,
           "status": "published"
+        },
+        {
+          "code": "m3-window",
+          "title": "SQL: funciones de ventana",
+          "objective": "Usar ROW_NUMBER y RANK para rangos.",
+          "competency": "SQL avanzado",
+          "content": "ROW_NUMBER() OVER (PARTITION BY region ORDER BY unidades DESC) asigna ranking dentro de cada region. Distinto de GROUP BY: la fila permanece. Error comun: confundir agregacion con ventana.",
+          "duration": 30,
+          "order": 2,
+          "status": "published"
+        },
+        {
+          "code": "m3-cte",
+          "title": "SQL: CTE y subconsultas",
+          "objective": "Reescribir una subconsulta como CTE legible.",
+          "competency": "SQL avanzado",
+          "content": "WITH ventas_norte AS (SELECT * FROM ventas WHERE region='Norte') SELECT * FROM ventas_norte. Las CTE hacen legible el analisis paso a paso (reproducibilidad).",
+          "duration": 30,
+          "order": 3,
+          "status": "published"
         }
       ]
     },
@@ -200,6 +220,26 @@
           "content": "x=5, if x>3: print('mayor'). for i in range(3): print(i). Prueba en Lab Python con math y statistics.",
           "duration": 30,
           "order": 1,
+          "status": "published"
+        },
+        {
+          "code": "m4-listas",
+          "title": "Python: listas y diccionarios",
+          "objective": "Manipular colecciones.",
+          "competency": "Python fundamentos",
+          "content": "Lista [10,20]; append; diccionario {'region':'Norte','unidades':10}. Acceso por indice vs clave. Recorre con for y filtra con if. Practica en el laboratorio Python con el ejemplo de ventas.",
+          "duration": 30,
+          "order": 2,
+          "status": "published"
+        },
+        {
+          "code": "m4-funciones",
+          "title": "Python: funciones y errores",
+          "objective": "Definir funciones y leer tracebacks.",
+          "competency": "Python fundamentos",
+          "content": "def total(v): return sum(v). Un traceback indica archivo, linea y tipo: lee desde el final (causa). try/except captura errores esperados. Buena practica: funciones cortas con nombres claros.",
+          "duration": 30,
+          "order": 3,
           "status": "published"
         }
       ]
@@ -524,6 +564,26 @@
         "JOIN"
       ],
       "answer": "GROUP BY en SQL",
+      "xp": 20
+    },
+    {
+      "lesson": "m3-cte",
+      "kind": "mcq",
+      "prompt": "Una CTE (WITH ...) sirve para:",
+      "options": [
+        "Hacer legible el analisis paso a paso",
+        "Borrar datos",
+        "Crear tablas nuevas",
+        "Medir tiempos"
+      ],
+      "answer": "Hacer legible el analisis paso a paso",
+      "xp": 20
+    },
+    {
+      "lesson": "m4-funciones",
+      "kind": "python",
+      "prompt": "Imprime el resultado de sumar [1,2,3] con sum().",
+      "expected_output": "6",
       "xp": 20
     }
   ],

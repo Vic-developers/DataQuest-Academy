@@ -55,6 +55,23 @@ class StatsIn(BaseModel):
     values: str  # ej. "2,4,4,10"
 
 
+class LessonIn(BaseModel):
+    world_id: int
+    code: str = Field(min_length=3, max_length=100)
+    title: str
+    objective: str = ""
+    competency: str = ""
+    content: str = ""
+    duration: int = 15
+
+
+class ExerciseIn(BaseModel):
+    lesson_id: int
+    kind: str
+    prompt: str
+    answer: str = ""
+
+
 def current_user(token: str | None = Depends(oauth), db: Session = Depends(get_db)) -> User:
     if not token:
         raise HTTPException(401, "Token requerido")
@@ -248,6 +265,48 @@ def admin_stats(u: User = Depends(current_user), db: Session = Depends(get_db)):
             "exercises": db.query(Exercise).count(), "xp_total": db.query(XPTransaction).count(),
             "certificates": db.query(Certificate).count(), "attempts": db.query(ExerciseAttempt).count(),
             "correct_rate": (db.query(ExerciseAttempt).filter(ExerciseAttempt.correct == True).count() / max(db.query(ExerciseAttempt).count(), 1))}
+
+
+@router.get("/admin/lessons")
+def admin_lessons(u: User = Depends(current_user), db: Session = Depends(get_db)):
+    if u.role not in ("admin", "author", "reviewer"):
+        raise HTTPException(403, "Sin permiso")
+    return [{"id": l.id, "code": l.code, "title": l.title, "world_id": l.world_id} for l in db.query(Lesson).all()]
+
+
+@router.post("/admin/lessons")
+def admin_create_lesson(b: LessonIn, u: User = Depends(current_user), db: Session = Depends(get_db)):
+    if u.role not in ("admin", "author"):
+        raise HTTPException(403, "Sin permiso")
+    if db.query(Lesson).filter(Lesson.code == b.code).first():
+        raise HTTPException(400, "Código de lección duplicado")
+    w = db.query(World).filter(World.id == b.world_id).first()
+    if not w:
+        raise HTTPException(404, "Mundo no encontrado")
+    l = Lesson(world_id=w.id, code=b.code, title=b.title, objective=b.objective, competency=b.competency,
+               content=b.content, duration_min=b.duration, status="published")
+    db.add(l)
+    db.add(AuditLog(actor=u.email, action="lesson_create", detail=b.code))
+    db.commit()
+    db.refresh(l)
+    return {"id": l.id, "code": l.code, "title": l.title}
+
+
+@router.post("/admin/exercises")
+def admin_create_exercise(b: ExerciseIn, u: User = Depends(current_user), db: Session = Depends(get_db)):
+    if u.role not in ("admin", "author"):
+        raise HTTPException(403, "Sin permiso")
+    if b.kind not in ("mcq", "sql", "python"):
+        raise HTTPException(400, "kind debe ser mcq, sql o python")
+    l = db.query(Lesson).filter(Lesson.id == b.lesson_id).first()
+    if not l:
+        raise HTTPException(404, "Lección no encontrada")
+    e = Exercise(lesson_id=l.id, kind=b.kind, prompt=b.prompt, answer=b.answer)
+    db.add(e)
+    db.add(AuditLog(actor=u.email, action="exercise_create", detail=f"{l.code}:{b.kind}"))
+    db.commit()
+    db.refresh(e)
+    return {"id": e.id, "kind": e.kind}
 
 
 @router.get("/admin/audit")
