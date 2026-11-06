@@ -1,0 +1,39 @@
+{
+  "worlds": [
+    {"code":"mundo-0","title":"Mundo 0 — Iniciación Absoluta","description":"Alfabetización digital y pensamiento analítico.","order":0,"lessons":[
+      {"code":"m0-datos","title":"Qué son los datos","objective":"Distinguir dato, información y conocimiento.","competency":"Alfabetización de datos","content":"Dato: registro bruto (42). Información: dato interpretado (42°C en Madrid). Conocimiento decides con información. Ejemplo: ventas.csv es dato; 'ventas subieron 20%' es información.","duration":15,"order":1,"status":"published"},
+      {"code":"m0-tipos","title":"Tipos de datos y formatos","objective":"Identificar tipos (texto, número, fecha, booleano) y formatos CSV/XLSX/JSON/TXT.","competency":"Tipos y formatos","content":"Tipos: texto, entero, decimal, fecha, booleano. CSV se lee con coma; JSON con claves; XLSX es binario Excel. Practica abriendo datasets/ventas.csv y contando columnas.","duration":20,"order":2,"status":"published"},
+      {"code":"m0-tablas","title":"Tablas, filas y columnas","objective":"Leer una tabla y extraer conclusiones simples.","competency":"Lectura de tablas","content":"Tabla = filas (registros) × columnas (atributos). Filas = observaciones; columnas = variables. Analiza datasets/ventas.csv: ¿qué región vende más unidades? Suma unidades por región.","duration":20,"order":3,"status":"published"},
+      {"code":"m0-graficos","title":"Lectura de gráficos","objective":"Interpretar barras y líneas sin caer en trampas.","competency":"Interpretación visual","content":"Eje Y debe empezar en 0 en barras. Línea muestra tendencia, barra compara. Pregunta siempre: ¿quién recogió los datos? ¿hay valores faltantes?","duration":20,"order":4,"status":"published"},
+      {"code":"m0-mates","title":"Porcentajes y proporciones","objective":"Calcular variación porcentual.","competency":"Matemáticas aplicadas","content":"Variación = (nuevo-viejo)/viejo×100. De 100 a 120 es +20%. Proporción = parte/total. Practica con ventas: si Norte pasa de 10 a 12 unidades, +20%.","duration":25,"order":5,"status":"published"},
+      {"code":"m0-etica","title":"Ética y privacidad de datos","objective":"Aplicar principios básicos de protección de datos.","competency":"Ética de datos","content":"Usa datos sintéticos/públicos. No compartas datos personales. Pide consentimiento, anonimiza, limita acceso. El análisis no justifica exponer a personas.","duration":15,"order":6,"status":"published"},
+      {"code":"m0-sql-intro","title":"Intro SQL: SELECT","objective":"Consultar la tabla ventas con SELECT/WHERE.","competency":"SQL básico","content":"SELECT region, producto FROM ventas WHERE region='Norte'; Filtra con WHERE, ordena con ORDER BY. Abre el Laboratorio SQL y prueba.","duration":30,"order":7,"status":"published"},
+      {"code":"m0-python-intro","title":"Intro Python: imprimir y sumar","objective":"Ejecutar tu primer programa Python.","competency":"Python básico","content":"print('Hola') muestra texto. Suma con +. En el Lab Python escribe: print(10+5) y verifica que sale 15.","duration":20,"order":8,"status":"published"}
+    ]},
+    {"code":"mundo-1","title":"Mundo 1 — Excel","description":"Excel desde cero hasta avanzado. MVP: intro real; resto por fases 9.","order":1,"status":"planned","lessons":[
+      {"code":"m1-intro","title":"Excel: celdas, formato y fórmulas","objective":"Crear fórmulas SUMA/PROMEDIO/SI.","competency":"Excel intro","content":"Celdas A1, formato número, =SUMA(A1:A3), =PROMEDIO, =SI(A1>10;\"SI\";\"NO\").referencias $A$1 absolutas. Descarga datasets/ventas.csv para practicar.","duration":30,"order":1,"status":"published"}
+    ]},
+    {"code":"mundo-2","title":"Mundo 2 — Matemáticas y estadística","description":"Estadística aplicada con simulaciones. En desarrollo (Fase 9).","order":2,"status":"planned","lessons":[]},
+    {"code":"mundo-3","title":"Mundo 3 — SQL","description":"SQL y bases de datos. MVP intro real en Mundo 0; resto por fases.","order":3,"status":"planned","lessons":[
+      {"code":"m3-agregacion","title":"SQL: GROUP BY y JOIN","objective":"Agregar y unir tablas.","competency":"SQL intermedio","content":"SELECT region, SUM(unidades) FROM ventas GROUP BY region. INNER JOIN une filas coincidentes. Practica en Lab SQL.","duration":30,"order":1,"status":"published"}
+    ]},
+    {"code":"mundo-4","title":"Mundo 4 — Python desde cero","description":"Programación con Python. MVP intro real; resto por fases.","order":4,"status":"planned","lessons":[
+      {"code":"m4-vars","title":"Python: variables y bucles","objective":"Usar variables, condicionales y bucles.","competency":"Python fundamentos","content":"x=5, if x>3: print('mayor'). for i in range(3): print(i). Prueba en Lab Python con math y statistics.","duration":30,"order":1,"status":"published"}
+    ]},
+    {"code":"mundo-5","title":"Mundo 5 — Python para análisis","description":"Pandas/NumPy/visualización. Fase 9.","order":5,"status":"planned","lessons":[]},
+    {"code":"mundo-6","title":"Mundo 6 — Power BI","description":"BI con prácticas guiadas descargables. Fase 9.","order":6,"status":"planned","lessons":[]},
+    {"code":"mundo-7","title":"Mundo 7 — Análisis avanzado","description":"Diagnóstico, A/B, cohortes. Fase 9.","order":7,"status":"planned","lessons":[]},
+    {"code":"mundo-8","title":"Mundo 8 — Ingeniería de datos","description":"ETL/ELT y pipelines. Fase 9.","order":8,"status":"planned","lessons":[]},
+    {"code":"mundo-9","title":"Mundo 9 — Portafolio profesional","description":"Proyectos y empleo. Fase 9.","order":9,"status":"planned","lessons":[]},
+    {"code":"mundo-10","title":"Mundo 10 — Puente a Ciencia de Datos","description":"ML introductorio y proyecto final. Fase 10.","order":10,"status":"planned","lessons":[]}
+  ],
+  "exercises": [
+    {"lesson":"m0-sql-intro","kind":"sql","prompt":"Selecciona region y producto de ventas donde region sea Norte.","expected_sql":"SELECT region, producto FROM ventas WHERE region='Norte'","xp":20},
+    {"lesson":"m0-python-intro","kind":"python","prompt":"Escribe código que imprima 15 (ej. print(10+5)).","expected_output":"15","xp":20},
+    {"lesson":"m0-mates","kind":"mcq","prompt":"De 100 a 120, la variación es:","options":["20%","10%","25%","5%"],"answer":"20%","xp":20},
+    {"lesson":"m3-agregacion","kind":"sql","prompt":"Suma unidades por region.","expected_sql":"SELECT region, SUM(unidades) AS s FROM ventas GROUP BY region ORDER BY region","xp":20}
+  ],
+  "projects": [
+    {"code":"p0-ventas","title":"Proyecto: análisis de ventas","description":"Analiza datasets/ventas.csv: totales por región, producto estrella y 3 recomendaciones.","rubric":"Datos citados / método / hallazgos / limitaciones / conclusiones"}
+  ]
+}

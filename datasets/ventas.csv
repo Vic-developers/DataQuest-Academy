@@ -1,0 +1,6 @@
+# Dataset SINTÉTICO (no contiene datos personales). Generado para práctica.
+id,region,producto,unidades,precio
+1,Norte,A,10,100
+2,Sur,A,5,120
+3,Norte,B,8,50
+4,Este,B,3,60
