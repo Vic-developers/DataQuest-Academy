@@ -43,6 +43,8 @@ cd backend; $env:PYTHONPATH="."; python -m pytest tests/ -v
 - Visión y arquitectura: `docs/phase0/`
 - Modelo de datos: `docs/phase0/03-modelo-datos.md`
 - roadmap y criterios: `docs/phase0/07-roadmap.md`
+- Estado para publicación: `docs/ESTADO.md`
+- Prompt maestro original: `prompt/PROMPT_MAESTRO.md`
 
 ## Seguridad y honestidad
 Sin botones falsos: lo marcado `planned` está en desarrollo. IA opcional: sin proveedor, el tutor usa KB local.
