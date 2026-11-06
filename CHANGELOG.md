@@ -1,4 +1,9 @@
 # Changelog
+## [0.6.0] — Visualización interactiva (2026-11-06)
+- Lab `/labs/viz` con Recharts (barras unidades por región, eje desde 0) + `GET /labs/viz/ventas` real sobre `ventas`.
+- Mundo 7 (funnels, series) + Mundo 8 (Docker) + ejercicio. Total: 41 lecciones, 14 ejercicios.
+- Tests: 15 passed.
+
 ## [0.5.0] — Lab de hojas + Power BI práctico (2026-11-06)
 - Laboratorio de hojas `/labs/hojas` + `POST /labs/sheet/evaluate`: cuadrícula editable, SUMA/PROMEDIO/CONTAR/MIN/MAX/SI reales (documenta límites, no es Excel completo).
 - `datasets/ventas_powerbi.csv` + `DICCIONARIO_DATOS.md` para práctica guiada Power BI/Excel.

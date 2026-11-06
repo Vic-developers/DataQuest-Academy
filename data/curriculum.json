@@ -368,6 +368,26 @@
           "duration": 30,
           "order": 2,
           "status": "published"
+        },
+        {
+          "code": "m7-funnel",
+          "title": "Funnels de conversión",
+          "objective": "Analizar abandono por etapa.",
+          "competency": "Funnels",
+          "content": "Visita 100% -> registro 40% -> compra 15%. La mayor caída indica el problema. Conecta con el lab de gráficos: compara tasas y propone hipótesis medibles.",
+          "duration": 25,
+          "order": 3,
+          "status": "published"
+        },
+        {
+          "code": "m7-series",
+          "title": "Series temporales",
+          "objective": "Detectar tendencia y estacionalidad.",
+          "competency": "Series temporales",
+          "content": "Descomposición: tendencia + estación + residuo. ventas_powerbi.csv permite graficar por mes. Forecasting ingenuo (último valor) como línea base antes de modelos complejos.",
+          "duration": 30,
+          "order": 4,
+          "status": "published"
         }
       ]
     },
@@ -396,6 +416,16 @@
           "content": "Chequeos: completitud, unicidad, validez (fechas), consistencia. Registro de cuarentena para filas inválidas; nunca silenciosas. Métricas de calidad en cada corrida.",
           "duration": 25,
           "order": 2,
+          "status": "published"
+        },
+        {
+          "code": "m8-docker",
+          "title": "Docker para entornos reproducibles",
+          "objective": "Explicar contenedores con build.",
+          "competency": "Docker intro",
+          "content": "La imagen fija el entorno (Python + dependencias). docker compose levanta api + web. Error común: compartir archivos sin .dockerignore o con secretos en la imagen.",
+          "duration": 30,
+          "order": 3,
           "status": "published"
         }
       ]
@@ -617,6 +647,19 @@
         "No tener titulo"
       ],
       "answer": "Empezar en 0",
+      "xp": 20
+    },
+    {
+      "lesson": "m7-funnel",
+      "kind": "mcq",
+      "prompt": "En un funnel, la mayor caída indica:",
+      "options": [
+        "La etapa problema",
+        "El mejor producto",
+        "El peor gráfico",
+        "Nada"
+      ],
+      "answer": "La etapa problema",
       "xp": 20
     }
   ],

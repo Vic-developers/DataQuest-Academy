@@ -242,6 +242,13 @@ def sheet_eval(b: SheetIn):
     return eval_sheet(b.grid)
 
 
+@router.get("/labs/viz/ventas")
+def viz_ventas():
+    from app.services.labs import run_sql
+    res = run_sql("SELECT region, SUM(unidades) AS u FROM ventas GROUP BY region ORDER BY region")
+    return {"rows": res.get("rows", [])} if res["ok"] else {"ok": False, "error": res["error"]}
+
+
 @router.post("/labs/stats")
 def labs_stats(b: StatsIn):
     import statistics
