@@ -8,6 +8,7 @@
 6 Contenido vertical ✅ (Mundo 0 completo + intro Excel/SQL/Python + proyecto)
 7 Tutor ✅ (contextual socrático, RAG local, proveedor opcional)
 8 Proyectos/certificaciones ✅ (entregas, rúbrica, PDF, verificación pública)
-9–10 Currículo profesional: extender Mundos 1–9 y 10 con revisión académica por lotes.
-11 Admin/analítica ✅ básico (usuarios, contenidos, reportes) — evolucionar.
-12 Calidad/despliegue: tests E2E, carga, accesibilidad auditada, despliegue.
+9 Currículo profesional: lote 1 ✅ (Mundos 2, 5-10 con lecciones reales) — faltan lotes por tema con revisión académica.
+10 Puente DS: lote 1 ✅ (álgebra, regresión, pipeline) — falta proyecto modelo final.
+11 Admin/analítica ✅ básico ampliado (stats agregadas + misiones/insignias) — falta editor completo.
+12 Calidad: CI ✅ — faltan E2E Playwright, carga y auditoría de accesibilidad.

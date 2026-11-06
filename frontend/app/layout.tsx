@@ -16,6 +16,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Link href="/labs/python">Python</Link>
             <Link href="/tutor">Tutor</Link>
             <Link href="/proyectos">Proyectos</Link>
+            <Link href="/labs/estadistico">Estadística</Link>
+            <Link href="/misiones">Misiones</Link>
+            <Link href="/admin">Admin</Link>
             <Link href="/login">Entrar</Link>
           </nav>
         </header>

@@ -51,6 +51,10 @@ class ProjectIn(BaseModel):
     content: str
 
 
+class StatsIn(BaseModel):
+    values: str  # ej. "2,4,4,10"
+
+
 def current_user(token: str | None = Depends(oauth), db: Session = Depends(get_db)) -> User:
     if not token:
         raise HTTPException(401, "Token requerido")
@@ -210,6 +214,40 @@ def dash(u: User = Depends(current_user), db: Session = Depends(get_db)):
     xp = db.query(XPTransaction).filter(XPTransaction.user_id == u.id).order_by(XPTransaction.id.desc()).limit(10).all()
     return {"xp": p.total_xp if p else 0, "streak": p.streak_days if p else 0, "done": done, "total": total,
             "recent_xp": [{"amount": t.amount, "reason": t.reason} for t in xp]}
+
+
+@router.post("/labs/stats")
+def labs_stats(b: StatsIn):
+    import statistics
+    try:
+        vals = [float(x) for x in b.values.replace(";", ",").split(",") if x.strip()]
+        if not vals:
+            return {"ok": False, "error": "Ingresa al menos un número."}
+        return {"ok": True, "n": len(vals), "mean": statistics.mean(vals), "median": statistics.median(vals),
+                "pstdev": statistics.pstdev(vals) if len(vals) > 1 else 0.0,
+                "min": min(vals), "max": max(vals)}
+    except Exception as e:
+        return {"ok": False, "error": str(e)}
+
+
+@router.get("/missions")
+def missions(db: Session = Depends(get_db)):
+    return [{"id": m.id, "title": m.title, "description": m.description, "xp": m.xp} for m in db.query(Mission).all()]
+
+
+@router.get("/badges")
+def badges(db: Session = Depends(get_db)):
+    return [{"code": b.code, "title": b.title} for b in db.query(Badge).all()]
+
+
+@router.get("/admin/stats")
+def admin_stats(u: User = Depends(current_user), db: Session = Depends(get_db)):
+    if u.role not in ("admin", "author", "reviewer"):
+        raise HTTPException(403, "Sin permiso")
+    return {"users": db.query(User).count(), "lessons": db.query(Lesson).count(),
+            "exercises": db.query(Exercise).count(), "xp_total": db.query(XPTransaction).count(),
+            "certificates": db.query(Certificate).count(), "attempts": db.query(ExerciseAttempt).count(),
+            "correct_rate": (db.query(ExerciseAttempt).filter(ExerciseAttempt.correct == True).count() / max(db.query(ExerciseAttempt).count(), 1))}
 
 
 @router.get("/admin/audit")

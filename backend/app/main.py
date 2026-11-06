@@ -43,6 +43,13 @@ def seed() -> None:
                                expected_sql=ex.get("expected_sql"), expected_output=ex.get("expected_output"),
                                options=json.dumps(ex["options"]) if ex.get("options") else None,
                                answer=ex.get("answer"), xp=ex.get("xp", 20)))
+        from app.models.models import Mission as MModel, Badge as BModel
+        for m in data.get("missions", []):
+            if not db.query(MModel).filter(MModel.title == m["title"]).first():
+                db.add(MModel(title=m["title"], description=m.get("description", ""), xp=m.get("xp", 100)))
+        for b in data.get("badges", []):
+            if not db.query(BModel).filter(BModel.code == b["code"]).first():
+                db.add(BModel(code=b["code"], title=b["title"]))
         db.commit()
     finally:
         db.close()

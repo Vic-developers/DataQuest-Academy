@@ -13,27 +13,69 @@
     {"code":"mundo-1","title":"Mundo 1 — Excel","description":"Excel desde cero hasta avanzado. MVP: intro real; resto por fases 9.","order":1,"status":"planned","lessons":[
       {"code":"m1-intro","title":"Excel: celdas, formato y fórmulas","objective":"Crear fórmulas SUMA/PROMEDIO/SI.","competency":"Excel intro","content":"Celdas A1, formato número, =SUMA(A1:A3), =PROMEDIO, =SI(A1>10;\"SI\";\"NO\").referencias $A$1 absolutas. Descarga datasets/ventas.csv para practicar.","duration":30,"order":1,"status":"published"}
     ]},
-    {"code":"mundo-2","title":"Mundo 2 — Matemáticas y estadística","description":"Estadística aplicada con simulaciones. En desarrollo (Fase 9).","order":2,"status":"planned","lessons":[]},
+    {"code":"mundo-2","title":"Mundo 2 — Matemáticas y estadística","description":"Estadística aplicada con simulaciones. Fase 9, lote 1.","order":2,"status":"planned","lessons":[
+      {"code":"m2-descriptiva","title":"Media, mediana y moda","objective":"Calcular y elegir la medida de tendencia adecuada.","competency":"Estadística descriptiva","content":"Media = suma/n. Mediana = valor central (robusta a atípicos). Moda = más frecuente. Ejemplo: [2,4,4,10] media 5, mediana 4. Error común: usar media con datos muy sesgados. Lab estadístico calcula estas medidas.","duration":25,"order":1,"status":"published"},
+      {"code":"m2-varianza","title":"Varianza y desviación estándar","objective":"Medir dispersión de datos.","competency":"Dispersión","content":"Varianza = promedio de (x-media)^2. Desviación = raíz. Datos [1,3,5] media 3, varianza 2.67, desviación 1.63. En Python: statistics.pvariance / pstdev. Mayor desviación = más heterogéneo.","duration":25,"order":2,"status":"published"},
+      {"code":"m2-correlacion","title":"Correlación y causalidad","objective":"Distinguir correlación (r) de causalidad.","competency":"Correlación","content":"r va de -1 a 1. |r|>0.7 fuerte, pero NO prueba causa. Confusores y sesgos de selección son errores frecuentes. Siempre formula hipótesis y diseño antes de concluir.","duration":25,"order":3,"status":"published"}
+    ]},
     {"code":"mundo-3","title":"Mundo 3 — SQL","description":"SQL y bases de datos. MVP intro real en Mundo 0; resto por fases.","order":3,"status":"planned","lessons":[
       {"code":"m3-agregacion","title":"SQL: GROUP BY y JOIN","objective":"Agregar y unir tablas.","competency":"SQL intermedio","content":"SELECT region, SUM(unidades) FROM ventas GROUP BY region. INNER JOIN une filas coincidentes. Practica en Lab SQL.","duration":30,"order":1,"status":"published"}
     ]},
     {"code":"mundo-4","title":"Mundo 4 — Python desde cero","description":"Programación con Python. MVP intro real; resto por fases.","order":4,"status":"planned","lessons":[
       {"code":"m4-vars","title":"Python: variables y bucles","objective":"Usar variables, condicionales y bucles.","competency":"Python fundamentos","content":"x=5, if x>3: print('mayor'). for i in range(3): print(i). Prueba en Lab Python con math y statistics.","duration":30,"order":1,"status":"published"}
     ]},
-    {"code":"mundo-5","title":"Mundo 5 — Python para análisis","description":"Pandas/NumPy/visualización. Fase 9.","order":5,"status":"planned","lessons":[]},
-    {"code":"mundo-6","title":"Mundo 6 — Power BI","description":"BI con prácticas guiadas descargables. Fase 9.","order":6,"status":"planned","lessons":[]},
-    {"code":"mundo-7","title":"Mundo 7 — Análisis avanzado","description":"Diagnóstico, A/B, cohortes. Fase 9.","order":7,"status":"planned","lessons":[]},
-    {"code":"mundo-8","title":"Mundo 8 — Ingeniería de datos","description":"ETL/ELT y pipelines. Fase 9.","order":8,"status":"planned","lessons":[]},
-    {"code":"mundo-9","title":"Mundo 9 — Portafolio profesional","description":"Proyectos y empleo. Fase 9.","order":9,"status":"planned","lessons":[]},
-    {"code":"mundo-10","title":"Mundo 10 — Puente a Ciencia de Datos","description":"ML introductorio y proyecto final. Fase 10.","order":10,"status":"planned","lessons":[]}
+    {"code":"mundo-5","title":"Mundo 5 — Python para análisis","description":"Análisis con stdlib + conceptos pandas. Fase 9, lote 1.","order":5,"status":"planned","lessons":[
+      {"code":"m5-csv","title":"Leer CSV con Python","objective":"Cargar y agregar un CSV con csv + statistics.","competency":"Ingesta Python","content":"import csv; csv.DictReader(f). Ejemplo: suma unidades por región desde datasets/ventas.csv. En Kaggle/DF usarías pandas (read_csv, groupby); aquí practicas la lógica sin dependencia pesada. Error común: abrir sin encoding='utf-8'.","duration":30,"order":1,"status":"published"},
+      {"code":"m5-estadistica","title":"Estadística con Python","objective":"Calcular media, mediana y desviación.","competency":"Estadística Python","content":"import statistics: mean, median, pstdev. Ejemplo: statistics.mean([10,15,20]) = 15. Documenta resultados en notebook con conclusiones (reproducibilidad).","duration":25,"order":2,"status":"published"}
+    ]},
+    {"code":"mundo-6","title":"Mundo 6 — Power BI","description":"BI con prácticas guiadas descargables. Fase 9.","order":6,"status":"planned","lessons":[
+      {"code":"m6-kpis","title":"KPIs y medidas","objective":"Definir un KPI con fórmula verificable.","competency":"BI y KPIs","content":"KPI = medida + objetivo + período. Ejemplo: Ventas = SUM(unidades*precio). En Power BI: medidas DAX. Práctica: calcula ventas totales de ventas.csv a mano y luego en Excel/Power BI Desktop.","duration":30,"order":1,"status":"published"},
+      {"code":"m6-dax","title":"DAX básico: CALCULATE","objective":"Usar CALCULATE con contexto de filtro.","competency":"DAX intro","content":"CALCULATE(SUM(ventas[unidades]), ventas[region]=\"Norte\"). El contexto de filtro es el alma de DAX; sin él obtienes totales incorrectos (error frecuente).","duration":30,"order":2,"status":"published"}
+    ]},
+    {"code":"mundo-7","title":"Mundo 7 — Análisis avanzado","description":"A/B, cohortes y diagnóstico. Fase 9.","order":7,"status":"planned","lessons":[
+      {"code":"m7-ab","title":"Pruebas A/B","objective":"Diseñar una prueba A/B válida.","competency":"Experimentación","content":"Hipótesis, asignación aleatoria, métrica única, tamaño muestral, significación. Trafico dividido 50/50; evita mirar resultados a mitad (peeking). Ejemplo: botón verde vs azul.","duration":30,"order":1,"status":"published"},
+      {"code":"m7-cohortes","title":"Cohortes y retención","objective":"Construir una tabla de cohortes.","competency":"Cohortes","content":"Cohorte = grupo por mes de alta. Retención = % activo en mes N. Tabla región × mes con filas sumando 100%. Detecta mejoras reales vs estacionalidad.","duration":30,"order":2,"status":"published"}
+    ]},
+    {"code":"mundo-8","title":"Mundo 8 — Ingeniería de datos","description":"ETL/ELT y calidad de datos. Fase 9.","order":8,"status":"planned","lessons":[
+      {"code":"m8-etl","title":"ETL: extraer, transformar, cargar","objective":"Describir un pipeline ETL reproducible.","competency":"Pipelines","content":"Extract (API/CSV) → Transform (limpieza validada) → Load (DW). Cada etapa con validaciones: nulos, duplicados, rangos. Reproducible = mismo input → mismo output, versionado.","duration":30,"order":1,"status":"published"},
+      {"code":"m8-calidad","title":"Calidad y validación de datos","objective":"Aplicar chequeos de calidad.","competency":"Calidad de datos","content":"Chequeos: completitud, unicidad, validez (fechas), consistencia. Registro de cuarentena para filas inválidas; nunca silenciosas. Métricas de calidad en cada corrida.","duration":25,"order":2,"status":"published"}
+    ]},
+    {"code":"mundo-9","title":"Mundo 9 — Portafolio profesional","description":"Proyectos y empleo. Fase 9.","order":9,"status":"planned","lessons":[
+      {"code":"m9-documentacion","title":"Documentar análisis","objective":"Escribir un informe reproducible.","competency":"Comunicación analítica","content":"Estructura: pregunta → datos → método → hallazgos → limitaciones → recomendación. Cada número trazable a código/dataset. Ejemplo: informe con tabla ventas + gráfico de barras.","duration":25,"order":1,"status":"published"},
+      {"code":"m9-github","title":"GitHub y portafolio","objective":"Publicar proyectos con README.","competency":"Portafolio","content":"Repo con README (objetivo, datos sintéticos, cómo ejecutar), código limpio, sin secretos. 5 proyectos: Excel, SQL, Python, Power BI, integrador (ver Centro de proyectos).","duration":25,"order":2,"status":"published"}
+    ]},
+    {"code":"mundo-10","title":"Mundo 10 — Puente a Ciencia de Datos","description":"ML introductorio con proyecto final. Fase 10.","order":10,"status":"planned","lessons":[
+      {"code":"m10-algebra","title":"Vectores y matrices","objective":"Interpretar vectores/matrices para ML.","competency":"Álgebra lineal intro","content":"Vector = lista de números; matriz = tabla. Suma y producto punto son la base de regresión y redes. Ejemplo: [2,3]·[1,4]=14. Visualiza como fila/columna.","duration":30,"order":1,"status":"published"},
+      {"code":"m10-regresion","title":"Regresión lineal","objective":"Ajustar e interpretar una regresión.","competency":"Modelado supervisado","content":"y = a + b·x. b = pendiente. Fuga de datos (usar futuro para predecir pasado) es error crítico. Divide train/test, evalúa error (MAE/RMSE) y residuos.","duration":35,"order":2,"status":"published"},
+      {"code":"m10-pipeline","title":"Pipeline de ML","objective":"Construir un pipeline evaluable.","competency":"ML intro","content":"Datos → preproceso → modelo → evaluación → documentación. Métricas: precisión, recall, F1 según contexto. Interpretabilidad y sesgo antes de desplegar. Proyecto final: modelo predictivo sencillo documentado.","duration":35,"order":3,"status":"published"}
+    ]}
   ],
   "exercises": [
     {"lesson":"m0-sql-intro","kind":"sql","prompt":"Selecciona region y producto de ventas donde region sea Norte.","expected_sql":"SELECT region, producto FROM ventas WHERE region='Norte'","xp":20},
     {"lesson":"m0-python-intro","kind":"python","prompt":"Escribe código que imprima 15 (ej. print(10+5)).","expected_output":"15","xp":20},
     {"lesson":"m0-mates","kind":"mcq","prompt":"De 100 a 120, la variación es:","options":["20%","10%","25%","5%"],"answer":"20%","xp":20},
-    {"lesson":"m3-agregacion","kind":"sql","prompt":"Suma unidades por region.","expected_sql":"SELECT region, SUM(unidades) AS s FROM ventas GROUP BY region ORDER BY region","xp":20}
+    {"lesson":"m3-agregacion","kind":"sql","prompt":"Suma unidades por region.","expected_sql":"SELECT region, SUM(unidades) AS s FROM ventas GROUP BY region ORDER BY region","xp":20},
+    {"lesson":"m2-descriptiva","kind":"mcq","prompt":"Con datos muy sesgados, ¿qué medida central conviene?","options":["Mediana","Media siempre","Moda siempre","Ninguna"],"answer":"Mediana","xp":20},
+    {"lesson":"m2-varianza","kind":"python","prompt":"Imprime la media de [10, 15, 20] con statistics.mean.","expected_output":"15","xp":20},
+    {"lesson":"m5-csv","kind":"mcq","prompt":"¿Qué encoding se recomienda al abrir un CSV en Python?","options":["utf-8","latin-1 siempre","ascii","ninguno"],"answer":"utf-8","xp":20},
+    {"lesson":"m10-regresion","kind":"mcq","prompt":"¿Qué es la fuga de datos?","options":["Usar futuro para predecir pasado","Dividir train/test","Usar RMSE","Normalizar"],"answer":"Usar futuro para predecir pasado","xp":20}
   ],
   "projects": [
-    {"code":"p0-ventas","title":"Proyecto: análisis de ventas","description":"Analiza datasets/ventas.csv: totales por región, producto estrella y 3 recomendaciones.","rubric":"Datos citados / método / hallazgos / limitaciones / conclusiones"}
+    {"code":"p0-ventas","title":"Proyecto: análisis de ventas (Excel)","description":"Analiza datasets/ventas.csv: totales por región, producto estrella y 3 recomendaciones.","rubric":"Datos citados / método / hallazgos / limitaciones / conclusiones"},
+    {"code":"p1-sql","title":"Proyecto: SQL relacional","description":"Analiza ventas con SQL: agregaciones por región/producto y comparativas.","rubric":"Consultas correctas / interpretación / reproducibilidad"},
+    {"code":"p2-python","title":"Proyecto: Python EDA","description":"EDA con Python (stdlib) sobre ventas.csv + informe ejecutivo.","rubric":"Código ejecutable / hallazgos / limitaciones / conclusiones"},
+    {"code":"p3-powerbi","title":"Proyecto: dashboard ejecutivo","description":"Dashboard con KPIs (ventas, ticket medio) desde ventas.csv.","rubric":"KPIs verificables / visualización honesta / storytelling"},
+    {"code":"p4-integrador","title":"Proyecto integrador extremo a extremo","description":"Problema empresarial: ingesta → limpieza → análisis → recomendación → portafolio.","rubric":"Punta a punta / trazabilidad / comunicación / ética"}
+  ],
+  "missions": [
+    {"title":"Misión: suma por región","description":"Completa el ejercicio SQL de suma por region.","xp":100},
+    {"title":"Misión: primera media","description":"Completa el ejercicio de statistics.mean.","xp":100}
+  ],
+  "badges": [
+    {"code":"primera-consulta","title":"Primera consulta SQL"},
+    {"code":"primer-programa","title":"Primer programa Python"},
+    {"code":"primer-analisis","title":"Primer análisis"},
+    {"code":"analista-estadistico","title":"Analista estadístico"},
+    {"code":"proyecto-profesional","title":"Proyecto profesional completado"}
   ]
 }

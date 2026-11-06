@@ -1,0 +1,19 @@
+from fastapi.testclient import TestClient
+from app.main import app
+
+client = TestClient(app)
+
+def test_stats_lab():
+    r = client.post("/api/v1/labs/stats", json={"values": "2,4,4,10,20"})
+    assert r.status_code == 200 and r.json()["ok"]
+    assert r.json()["mean"] == 8.0 and r.json()["median"] == 4.0
+    r = client.post("/api/v1/labs/stats", json={"values": ""})
+    assert r.json()["ok"] is False
+
+def test_missions_badges_lists():
+    # pueden estar vacías en BD de test sin semilla, pero el endpoint debe responder 200 con lista
+    assert client.get("/api/v1/missions").status_code == 200
+    assert client.get("/api/v1/badges").status_code == 200
+
+def test_admin_requiere_auth():
+    assert client.get("/api/v1/admin/stats").status_code == 401
