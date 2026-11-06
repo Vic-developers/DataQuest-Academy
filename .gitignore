@@ -5,3 +5,4 @@ dataquest.db
 .env
 node_modules/
 .next/
+.agent/
