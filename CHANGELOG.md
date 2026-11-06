@@ -1,4 +1,8 @@
 # Changelog
+## [0.12.0] — Split train/test formal en lab ML (2026-11-06)
+- `POST /labs/ml/split`: split determinista 80/20 (seed 42), regresión en train, MAE train/test. Verificado en vivo (`mae_test=0.0`, 8/2).
+- Tests: 18 passed.
+
 ## [0.11.0] — Gamificación (2026-11-06)
 - Misiones completables con XP idempotente (`POST /missions/{id}/complete`), rankings anónimos (`GET /rankings`), avatar cosmético persistente (`POST /me/avatar`) + páginas `/rankings` y `/perfil`.
 - Tests: 17 passed.

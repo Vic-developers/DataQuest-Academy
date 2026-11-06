@@ -79,6 +79,7 @@ class SheetIn(BaseModel):
 class MlIn(BaseModel):
     xs: str = ""  # "1,2,3"
     ys: str = ""
+    test_ratio: float = 0.2
 
 
 class ProjectIn2(BaseModel):
@@ -283,6 +284,36 @@ def ml_regression(b: MlIn):
         a = my - b_ * mx
         mae = sum(abs(y - (a + b_ * x)) for x, y in zip(xs, ys)) / n
         return {"ok": True, "a": round(a, 4), "b": round(b_, 4), "mae": round(mae, 4), "n": n}
+    except Exception as e:
+        return {"ok": False, "error": str(e)}
+
+
+@router.post("/labs/ml/split")
+def ml_split(b: MlIn):
+    """Split train/test determinista (seed 42) + regresión en train + MAE en test."""
+    import random
+    try:
+        xs = [float(v) for v in b.xs.replace(";", ",").split(",") if v.strip()]
+        ys = [float(v) for v in b.ys.replace(";", ",").split(",") if v.strip()]
+        if len(xs) != len(ys) or len(xs) < 5:
+            return {"ok": False, "error": "Indica al menos 5 pares x, y con la misma longitud."}
+        idx = list(range(len(xs)))
+        random.Random(42).shuffle(idx)
+        n_test = max(1, int(len(xs) * b.test_ratio))
+        test_idx, train_idx = idx[:n_test], idx[n_test:]
+        xtr = [xs[i] for i in train_idx]; ytr = [ys[i] for i in train_idx]
+        xte = [xs[i] for i in test_idx]; yte = [ys[i] for i in test_idx]
+        n = len(xtr)
+        mx, my = sum(xtr) / n, sum(ytr) / n
+        den = sum((x - mx) ** 2 for x in xtr)
+        if den == 0:
+            return {"ok": False, "error": "Todos los x de train son iguales."}
+        b_ = sum((x - mx) * (y - my) for x, y in zip(xtr, ytr)) / den
+        a = my - b_ * mx
+        mae_train = sum(abs(y - (a + b_ * x)) for x, y in zip(xtr, ytr)) / n
+        mae_test = sum(abs(y - (a + b_ * x)) for x, y in zip(xte, yte)) / len(xte)
+        return {"ok": True, "a": round(a, 4), "b": round(b_, 4), "mae_train": round(mae_train, 4),
+                "mae_test": round(mae_test, 4), "n_train": len(xtr), "n_test": len(xte)}
     except Exception as e:
         return {"ok": False, "error": str(e)}
 
