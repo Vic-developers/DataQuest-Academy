@@ -1,4 +1,8 @@
 # Changelog
+## [0.9.0] — Mundo 9 empleo (2026-11-06)
+- Lecciones m9-entrevista (prueba técnica SQL) y m9-caso (estudio de caso completo) + 2 ejercicios. Total: 43 lecciones, 16 ejercicios.
+- Tests: 16 passed.
+
 ## [0.8.0] — E2E navegador + fix CORS/IPv6 (2026-11-06)
 - `scripts/e2e_browser.mjs` (landing → registro → lab SQL vía patchright) verificado: requests failed 0.
 - Fix CORS/IPv6: `localhost` → `::1` en Windows rompía fetch al backend IPv4. Unificado a `http://127.0.0.1:8000` (frontend default + build + compose `http://api:8000`; backend `--host 0.0.0.0`).

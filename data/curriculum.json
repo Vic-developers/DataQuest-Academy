@@ -456,6 +456,26 @@
           "duration": 25,
           "order": 2,
           "status": "published"
+        },
+        {
+          "code": "m9-entrevista",
+          "title": "Entrevistas técnicas y prueba SQL",
+          "objective": "Preparar una prueba técnica con SQL y explicación.",
+          "competency": "Pruebas técnicas",
+          "content": "Estrategia: lee el enunciado, explora el esquema, escribe una consulta simple y luego refina (WHERE, GROUP BY, JOIN). Explica en voz alta supuestos y comprobaciones. Error comun: dar una sola respuesta sin verificar el resultado en la tabla ventas.",
+          "duration": 30,
+          "order": 3,
+          "status": "published"
+        },
+        {
+          "code": "m9-caso",
+          "title": "Estudio de caso completo",
+          "objective": "Defender una recomendación con datos.",
+          "competency": "Estudios de caso",
+          "content": "Formato: contexto, pregunta, datos, metodo, hallazgos, limitaciones, recomendacion. Usa ventas_powerbi.csv para argumentar una decision (p. ej. priorizar Norte). Cada cifra debe ser trazable a una consulta o calculo documentado.",
+          "duration": 35,
+          "order": 4,
+          "status": "published"
         }
       ]
     },
@@ -660,6 +680,32 @@
         "Nada"
       ],
       "answer": "La etapa problema",
+      "xp": 20
+    },
+    {
+      "lesson": "m9-entrevista",
+      "kind": "mcq",
+      "prompt": "Ante una prueba SQL desconocida, lo primero es:",
+      "options": [
+        "Explorar el esquema",
+        "Escribir la consulta final",
+        "Entregar sin comprobar",
+        "Usar WINDOW sin verificar"
+      ],
+      "answer": "Explorar el esquema",
+      "xp": 20
+    },
+    {
+      "lesson": "m9-caso",
+      "kind": "mcq",
+      "prompt": "Toda cifra de un estudio de caso debe ser:",
+      "options": [
+        "Trazable a datos y metodo",
+        "Redondeada sin fuente",
+        "Solo visual",
+        "Secreta"
+      ],
+      "answer": "Trazable a datos y metodo",
       "xp": 20
     }
   ],
