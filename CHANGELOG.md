@@ -1,4 +1,9 @@
 # Changelog
+## [0.7.0] — Puente ML evaluable (2026-11-06)
+- Lab `/labs/ml` + `POST /labs/ml/regression`: regresión lineal por mínimos cuadrados y MAE (stdlib, verificado: y=2x → b=2.0, MAE=0).
+- Proyecto final p5-ml conectado al lab.
+- Tests: 16 passed.
+
 ## [0.6.0] — Visualización interactiva (2026-11-06)
 - Lab `/labs/viz` con Recharts (barras unidades por región, eje desde 0) + `GET /labs/viz/ventas` real sobre `ventas`.
 - Mundo 7 (funnels, series) + Mundo 8 (Docker) + ejercicio. Total: 41 lecciones, 14 ejercicios.

@@ -76,6 +76,11 @@ class SheetIn(BaseModel):
     grid: list[list[str]]
 
 
+class MlIn(BaseModel):
+    xs: str = ""  # "1,2,3"
+    ys: str = ""
+
+
 def current_user(token: str | None = Depends(oauth), db: Session = Depends(get_db)) -> User:
     if not token:
         raise HTTPException(401, "Token requerido")
@@ -247,6 +252,28 @@ def viz_ventas():
     from app.services.labs import run_sql
     res = run_sql("SELECT region, SUM(unidades) AS u FROM ventas GROUP BY region ORDER BY region")
     return {"rows": res.get("rows", [])} if res["ok"] else {"ok": False, "error": res["error"]}
+
+
+@router.post("/labs/ml/regression")
+def ml_regression(b: MlIn):
+    """Regresión lineal y = a + b*x por mínimos cuadrados + MAE (stdlib, sin sklearn)."""
+    try:
+        xs = [float(v) for v in b.xs.replace(";", ",").split(",") if v.strip()]
+        ys = [float(v) for v in b.ys.replace(";", ",").split(",") if v.strip()]
+        if len(xs) != len(ys) or len(xs) < 2:
+            return {"ok": False, "error": "Indica al menos 2 pares x, y con la misma longitud."}
+        n = len(xs)
+        mx, my = sum(xs) / n, sum(ys) / n
+        num = sum((x - mx) * (y - my) for x, y in zip(xs, ys))
+        den = sum((x - mx) ** 2 for x in xs)
+        if den == 0:
+            return {"ok": False, "error": "Todos los x son iguales: no se puede ajustar la pendiente."}
+        b_ = num / den
+        a = my - b_ * mx
+        mae = sum(abs(y - (a + b_ * x)) for x, y in zip(xs, ys)) / n
+        return {"ok": True, "a": round(a, 4), "b": round(b_, 4), "mae": round(mae, 4), "n": n}
+    except Exception as e:
+        return {"ok": False, "error": str(e)}
 
 
 @router.post("/labs/stats")
