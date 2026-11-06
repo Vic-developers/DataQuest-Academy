@@ -81,6 +81,13 @@ class MlIn(BaseModel):
     ys: str = ""
 
 
+class ProjectIn2(BaseModel):
+    code: str = Field(min_length=3, max_length=100)
+    title: str
+    description: str = ""
+    rubric: str = ""
+
+
 def current_user(token: str | None = Depends(oauth), db: Session = Depends(get_db)) -> User:
     if not token:
         raise HTTPException(401, "Token requerido")
@@ -350,6 +357,27 @@ def admin_create_exercise(b: ExerciseIn, u: User = Depends(current_user), db: Se
     db.commit()
     db.refresh(e)
     return {"id": e.id, "kind": e.kind}
+
+
+@router.get("/admin/projects")
+def admin_projects(u: User = Depends(current_user), db: Session = Depends(get_db)):
+    if u.role not in ("admin", "author", "reviewer"):
+        raise HTTPException(403, "Sin permiso")
+    return [{"code": p.code, "title": p.title} for p in db.query(Project).all()]
+
+
+@router.post("/admin/projects")
+def admin_create_project(b: ProjectIn2, u: User = Depends(current_user), db: Session = Depends(get_db)):
+    if u.role not in ("admin", "author"):
+        raise HTTPException(403, "Sin permiso")
+    if db.query(Project).filter(Project.code == b.code).first():
+        raise HTTPException(400, "Código de proyecto duplicado")
+    p = Project(code=b.code, title=b.title, description=b.description, rubric=b.rubric)
+    db.add(p)
+    db.add(AuditLog(actor=u.email, action="project_create", detail=b.code))
+    db.commit()
+    db.refresh(p)
+    return {"code": p.code, "title": p.title}
 
 
 @router.get("/admin/audit")

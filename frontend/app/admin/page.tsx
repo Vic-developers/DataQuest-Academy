@@ -42,7 +42,28 @@ function Editor() {
       <label className="block">Respuesta (mcq)<input className="block w-full border rounded px-3 py-2" value={ex.answer} onChange={e => setEx({ ...ex, answer: e.target.value })} /></label>
       <button className="rounded border px-4 py-2">Crear ejercicio</button>
     </form>
+    <ProjectEditor />
     {msg && <p role="status" className="mt-2">{msg}</p>}
+  </section>;
+}
+
+function ProjectEditor() {
+  const [ps, setPs] = useState<any[]>([]), [f, setF] = useState({ code: "", title: "", description: "", rubric: "" }), [msg, setMsg] = useState("");
+  async function load() { setPs(await api("/api/v1/admin/projects").catch(() => [])); }
+  useEffect(() => { load(); }, []);
+  async function create(e: React.FormEvent) { e.preventDefault();
+    try { await api("/api/v1/admin/projects", { method: "POST", body: JSON.stringify(f) }); setMsg("Proyecto creado."); load(); setF({ code: "", title: "", description: "", rubric: "" }); }
+    catch { setMsg("Error: necesitas rol admin/author y código único."); } }
+  return <section className="mt-8">
+    <h3 className="text-lg font-bold">Proyectos ({ps.length})</h3>
+    <form onSubmit={create} className="mt-2 space-y-2">
+      <label className="block">Código<input className="block w-full border rounded px-3 py-2" value={f.code} onChange={e => setF({ ...f, code: e.target.value })} required /></label>
+      <label className="block">Título<input className="block w-full border rounded px-3 py-2" value={f.title} onChange={e => setF({ ...f, title: e.target.value })} required /></label>
+      <label className="block">Descripción<textarea className="block w-full border rounded px-3 py-2" rows={2} value={f.description} onChange={e => setF({ ...f, description: e.target.value })} /></label>
+      <label className="block">Rúbrica<textarea className="block w-full border rounded px-3 py-2" rows={2} value={f.rubric} onChange={e => setF({ ...f, rubric: e.target.value })} /></label>
+      <button className="rounded border px-4 py-2">Crear proyecto</button>
+    </form>
+    {msg && <p role="status">{msg}</p>}
   </section>;
 }
 

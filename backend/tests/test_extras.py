@@ -17,6 +17,7 @@ def test_missions_badges_lists():
 
 def test_admin_requiere_auth():
     assert client.get("/api/v1/admin/stats").status_code == 401
+    assert client.get("/api/v1/admin/projects").status_code == 401
 
 
 def test_viz_ventas():
