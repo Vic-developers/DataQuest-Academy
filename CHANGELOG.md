@@ -1,4 +1,9 @@
 # Changelog
+## [0.8.0] — E2E navegador + fix CORS/IPv6 (2026-11-06)
+- `scripts/e2e_browser.mjs` (landing → registro → lab SQL vía patchright) verificado: requests failed 0.
+- Fix CORS/IPv6: `localhost` → `::1` en Windows rompía fetch al backend IPv4. Unificado a `http://127.0.0.1:8000` (frontend default + build + compose `http://api:8000`; backend `--host 0.0.0.0`).
+- `npm audit 0`, `pytest 16 passed`.
+
 ## [0.7.0] — Puente ML evaluable (2026-11-06)
 - Lab `/labs/ml` + `POST /labs/ml/regression`: regresión lineal por mínimos cuadrados y MAE (stdlib, verificado: y=2x → b=2.0, MAE=0).
 - Proyecto final p5-ml conectado al lab.
