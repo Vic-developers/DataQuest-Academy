@@ -7,7 +7,7 @@ from app.core.db import get_db
 from app.core.security import hash_password, verify_password, create_token, decode_token
 from app.models.models import User, Profile, World, Lesson, Progress, Exercise, ExerciseAttempt, XPTransaction, Project, ProjectSubmission, Certificate, Mission, Badge, UserBadge
 from app.services.gamification import award_xp, level_for_xp, update_streak, XP_LESSON, XP_EXERCISE, XP_EVAL
-from app.services.labs import run_sql, run_python
+from app.services.labs import run_sql, run_python, eval_sheet
 from app.services import tutor as tutor_svc
 from fastapi.security import OAuth2PasswordBearer
 from app.models.models import AuditLog
@@ -70,6 +70,10 @@ class ExerciseIn(BaseModel):
     kind: str
     prompt: str
     answer: str = ""
+
+
+class SheetIn(BaseModel):
+    grid: list[list[str]]
 
 
 def current_user(token: str | None = Depends(oauth), db: Session = Depends(get_db)) -> User:
@@ -231,6 +235,11 @@ def dash(u: User = Depends(current_user), db: Session = Depends(get_db)):
     xp = db.query(XPTransaction).filter(XPTransaction.user_id == u.id).order_by(XPTransaction.id.desc()).limit(10).all()
     return {"xp": p.total_xp if p else 0, "streak": p.streak_days if p else 0, "done": done, "total": total,
             "recent_xp": [{"amount": t.amount, "reason": t.reason} for t in xp]}
+
+
+@router.post("/labs/sheet/evaluate")
+def sheet_eval(b: SheetIn):
+    return eval_sheet(b.grid)
 
 
 @router.post("/labs/stats")

@@ -1,0 +1,9 @@
+# Dataset SINTÉTICO para práctica guiada de Power BI / Excel (no contiene datos personales).
+# Descárgalo para importar en Power BI Desktop o Excel: usa fecha para medidas de tiempo y región para filtros.
+fecha,region,producto,unidades,precio
+2025-01-05,Norte,A,10,100
+2025-01-18,Sur,A,5,120
+2025-02-02,Norte,B,8,50
+2025-02-15,Este,B,3,60
+2025-02-20,Norte,A,7,100
+2025-03-01,Sur,B,9,55

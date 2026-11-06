@@ -60,3 +60,87 @@ def run_python(code: str) -> dict:
         return {"ok": False, "error": "Tiempo agotado (5s). Optimiza tu código."}
     finally:
         Path(path).unlink(missing_ok=True)
+
+
+def _col_idx(s: str) -> int:
+    n = 0
+    for ch in s.upper():
+        n = n * 26 + (ord(ch) - 64)
+    return n - 1
+
+
+def _ref(grid, ref: str) -> str:
+    name = ref.strip().upper()
+    parts = "".join(c for c in name if c.isalpha())
+    nums = "".join(c for c in name if c.isdigit())
+    if not parts or not nums:
+        raise ValueError(f"Referencia inválida: {ref}")
+    r, c = int(nums) - 1, _col_idx(parts)
+    return grid[r][c] if 0 <= r < len(grid) and 0 <= c < len(grid[r]) else ""
+
+
+def _num(v: str) -> float:
+    v = v.strip().replace(",", ".")
+    return float(v) if v else 0.0
+
+
+def _range_vals(grid, rng: str) -> list[float]:
+    rng = rng.strip().upper()
+    if ":" not in rng:
+        return [_num(_ref(grid, rng))]
+    a, b = rng.split(":", 1)
+    pa = "".join(c for c in a if c.isalpha()); na = int("".join(c for c in a if c.isdigit()))
+    pb = "".join(c for c in b if c.isalpha()); nb = int("".join(c for c in b if c.isdigit()))
+    r1, c1, r2, c2 = na - 1, _col_idx(pa), nb - 1, _col_idx(pb)
+    vals = []
+    for r in range(min(r1, r2), max(r1, r2) + 1):
+        for c in range(min(c1, c2), max(c1, c2) + 1):
+            vals.append(_num(grid[r][c] if 0 <= r < len(grid) and 0 <= c < len(grid[r]) else ""))
+    return vals
+
+
+SHEET_FUNCS = {"SUMA", "PROMEDIO", "CONTAR", "MIN", "MAX"}
+
+
+def eval_sheet(grid: list[list[str]]) -> dict:
+    """Evalúa celdas con fórmulas =SUMA(A1:A3) etc. Funciones: SUMA, PROMEDIO, CONTAR, MIN, MAX, SI(A1>10; x; y)."""
+    computed, errors = [], []
+    g = [row[:] for row in grid]
+    for i, row in enumerate(grid):
+        out_row = []
+        for j, cell in enumerate(row):
+            c = (cell or "").strip()
+            if not c.startswith("="):
+                out_row.append(cell)
+                continue
+            f = c[1:].strip().upper()
+            try:
+                if f.startswith("SI("):
+                    inner = f[3:-1] if f.endswith(")") else f[3:]
+                    parts = [p.strip() for p in inner.split(";")]
+                    cond = parts[0].replace(" ", "")
+                    op, l, r = None, "", ""
+                    for cand in (">=", "<=", "<>", ">", "<", "="):
+                        if cand in cond:
+                            op, l, r = cand, cond.split(cand, 1)[0], cond.split(cand, 1)[1]
+                            break
+                    left = _num(_ref(g, l)) if l and l[0].isalpha() else _num(l)
+                    right = _num(_ref(g, r)) if r and r[0].isalpha() else _num(r)
+                    ok = {">": left > right, "<": left < right, ">=": left >= right,
+                          "<=": left <= right, "=": left == right, "<>": left != right}[op]
+                    raw = (parts[1] if ok else parts[2]) if len(parts) > 2 else ("VERDADERO" if ok else "FALSO")
+                    out_row.append(raw.strip().strip('"').strip("'"))
+                    continue
+                name, rest = f.split("(", 1) if "(" in f else (f, "")
+                if name not in SHEET_FUNCS:
+                    out_row.append("#FUNCION?"); errors.append(f"{i+1},{chr(65+j)}: {name}")
+                    continue
+                vals = _range_vals(g, rest[:-1] if rest.endswith(")") else rest)
+                val = sum(vals) if name == "SUMA" else (sum(vals) / len(vals) if name == "PROMEDIO" and vals else
+                       len(vals) if name == "CONTAR" else (min(vals) if name == "MIN" and vals else max(vals) if name == "MAX" and vals else 0))
+                out_row.append(str(round(val, 4)))
+            except Exception as e:
+                out_row.append("#ERROR"); errors.append(f"{i+1},{chr(65+j)}: {e}")
+        computed.append(out_row)
+    return {"ok": True, "computed": computed, "errors": errors,
+            "supported": "SUMA, PROMEDIO, CONTAR, MIN, MAX, SI(cond; a; b). Rangos A1:B5."}

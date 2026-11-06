@@ -124,6 +124,16 @@
           "duration": 30,
           "order": 3,
           "status": "published"
+        },
+        {
+          "code": "m1-hojas",
+          "title": "Hojas de calculo: fórmulas en la web",
+          "objective": "Usar el laboratorio de hojas con SUMA/PROMEDIO/SI.",
+          "competency": "Hojas web",
+          "content": "Abre el Laboratorio de hojas: escribe =SUMA(A1:C1) y =SI(A1>10; SI; NO). El laboratorio documenta qué funciones soporta (no es Excel completo). Para Excel real usa el archivo descargable.",
+          "duration": 25,
+          "order": 4,
+          "status": "published"
         }
       ]
     },
@@ -318,6 +328,16 @@
           "content": "CALCULATE(SUM(ventas[unidades]), ventas[region]=\"Norte\"). El contexto de filtro es el alma de DAX; sin él obtienes totales incorrectos (error frecuente).",
           "duration": 30,
           "order": 2,
+          "status": "published"
+        },
+        {
+          "code": "m6-dashboard",
+          "title": "Power BI: dashboard y storytelling",
+          "objective": "Construir un dashboard ejecutivo con ventas_powerbi.csv.",
+          "competency": "Dashboard BI",
+          "content": "Importa datasets/ventas_powerbi.csv en Power BI Desktop: modelo, medidas Ventas=SUM(unidades*precio), segmentador por region, grafico de barras desde 0. Storytelling: pregunta, hallazgo, recomendacion. Entrega verificable en el proyecto p3-powerbi.",
+          "duration": 40,
+          "order": 3,
           "status": "published"
         }
       ]
@@ -584,6 +604,19 @@
       "kind": "python",
       "prompt": "Imprime el resultado de sumar [1,2,3] con sum().",
       "expected_output": "6",
+      "xp": 20
+    },
+    {
+      "lesson": "m6-dashboard",
+      "kind": "mcq",
+      "prompt": "Un grafico de barras debe:",
+      "options": [
+        "Empezar en 0",
+        "Usar 3D",
+        "Ocultar ejes",
+        "No tener titulo"
+      ],
+      "answer": "Empezar en 0",
       "xp": 20
     }
   ],
