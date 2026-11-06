@@ -9,6 +9,10 @@ jobs:
         with: { python-version: "3.13" }
       - run: pip install -r backend/requirements.txt
       - run: cd backend && PYTHONPATH=. pytest tests/ -q
+      - run: |
+          cd backend && PYTHONPATH=. uvicorn app.main:app --host 127.0.0.1 --port 8000 &
+          sleep 8
+          python scripts/loadtest_adv.py http://127.0.0.1:8000 10
   frontend:
     runs-on: ubuntu-latest
     steps:

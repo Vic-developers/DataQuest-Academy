@@ -1,5 +1,10 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from collections import defaultdict
+import time
+
+_hits: dict[str, list[float]] = defaultdict(list)
+RATE_LIMIT_PER_MIN = 200
 from app.core.config import settings
 from app.api.v1 import router
 from app.core.db import engine, SessionLocal
@@ -9,6 +14,20 @@ from pathlib import Path
 
 Base.metadata.create_all(bind=engine)
 app = FastAPI(title="DataQuest Academy API", version="0.1.0")
+
+
+@app.middleware("http")
+async def rate_limit(request: Request, call_next):  # type: ignore[no-untyped-def]
+    if request.url.path == "/health":
+        return await call_next(request)
+    ip = request.client.host if request.client else "?"
+    now = time.time()
+    _hits[ip] = [t for t in _hits[ip] if now - t < 60]
+    if len(_hits[ip]) > RATE_LIMIT_PER_MIN:
+        from fastapi.responses import JSONResponse
+        return JSONResponse({"detail": "Demasiadas peticiones (rate limit)"}, status_code=429)
+    _hits[ip].append(now)
+    return await call_next(request)
 app.add_middleware(CORSMiddleware, allow_origins=settings.CORS_ORIGINS.split(","), allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
 app.include_router(router)
 

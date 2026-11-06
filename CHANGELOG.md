@@ -1,4 +1,8 @@
 # Changelog
+## [0.13.0] — Rate limit + carga en CI (2026-11-06)
+- Rate limit en memoria (200 req/min por IP, `/health` exento) + paso de carga en CI con `loadtest_adv.py`.
+- Verificado en vivo: smoke OK + carga 30/30 OK.
+
 ## [0.12.0] — Split train/test formal en lab ML (2026-11-06)
 - `POST /labs/ml/split`: split determinista 80/20 (seed 42), regresión en train, MAE train/test. Verificado en vivo (`mae_test=0.0`, 8/2).
 - Tests: 18 passed.
