@@ -1,4 +1,7 @@
 # Changelog
+## [0.10.0] — Carga avanzada (2026-11-06)
+- `scripts/loadtest_adv.py`: 90 peticiones (health/worlds/SQL), p50=20.5ms, p95=49.2ms, 100% OK en vivo.
+
 ## [0.9.0] — Mundo 9 empleo (2026-11-06)
 - Lecciones m9-entrevista (prueba técnica SQL) y m9-caso (estudio de caso completo) + 2 ejercicios. Total: 43 lecciones, 16 ejercicios.
 - Tests: 16 passed.
