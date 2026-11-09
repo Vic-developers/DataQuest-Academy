@@ -38,6 +38,13 @@ def test_gamification_endpoints():
     assert client.post("/api/v1/me/avatar", json={"avatar": "avatar-1"}).status_code == 401
 
 
+def test_ds5_nlp_dl():
+    r = client.post("/api/v1/labs/nlp/tokenize", json={"text": "Hola Hola mundo"})
+    assert r.json()["ok"] and r.json()["vocab_size"] == 2
+    r = client.post("/api/v1/labs/dl/perceptron", json={"xs": "1,2,3,4", "ys": "1,2,3,4", "epochs": 200})
+    assert r.json()["ok"] and r.json()["mae"] < 0.5
+
+
 def test_ds4_series_equidad():
     r = client.post("/api/v1/labs/ts/forecast", json={"values": "10,12,11,13,12,20", "window": 3})
     assert r.json()["ok"] and r.json()["naive"] == 20.0

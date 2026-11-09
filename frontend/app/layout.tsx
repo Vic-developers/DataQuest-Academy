@@ -25,6 +25,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Link href="/labs/clustering">Clustering</Link>
             <Link href="/labs/series">Series</Link>
             <Link href="/labs/equidad">Equidad</Link>
+            <Link href="/labs/nlp">NLP</Link>
+            <Link href="/labs/dl">DL</Link>
             <Link href="/misiones">Misiones</Link>
             <Link href="/rankings">Rankings</Link>
             <Link href="/perfil">Perfil</Link>

@@ -114,6 +114,16 @@ class FairnessIn(BaseModel):
     y_pred: str = ""
 
 
+class NlpIn(BaseModel):
+    text: str = ""
+
+
+class DlIn(BaseModel):
+    xs: str = ""  # "1,2,3"
+    ys: str = ""  # "0,0,1"
+    epochs: int = 50
+
+
 class AlgebraIn(BaseModel):
     a: str = ""  # filas separadas por ; y columnas por coma, ej. "1,2;3,4"
     b: str = ""
@@ -406,6 +416,34 @@ def ml_fairness(b: FairnessIn):
             rec = tp / (tp + fn) if (tp + fn) else 0.0
             out[grp] = {"precision": round(prec, 4), "recall": round(rec, 4), "n": len(idx)}
         return {"ok": True, "by_group": out}
+    except Exception as e:
+        return {"ok": False, "error": str(e)}
+
+
+@router.post("/labs/nlp/tokenize")
+def nlp_tokenize(b: NlpIn):
+    """Tokenización simple (minúsculas, palabras) + vocabulario (stdlib real)."""
+    import re
+    toks = re.findall(r"\w+", (b.text or "").lower())
+    vocab = sorted(set(toks))
+    return {"ok": True, "tokens": toks, "vocab_size": len(vocab), "vocab": vocab}
+
+
+@router.post("/labs/dl/perceptron")
+def dl_perceptron(b: DlIn):
+    """Perceptrón 1D con descenso de gradiente sobre error cuadrado (stdlib real)."""
+    try:
+        xs = [float(v) for v in b.xs.replace(";", ",").split(",") if v.strip()]
+        ys = [float(v) for v in b.ys.replace(";", ",").split(",") if v.strip()]
+        if len(xs) != len(ys) or len(xs) < 2:
+            return {"ok": False, "error": "Indica al menos 2 pares x, y."}
+        w, bb, lr = 0.0, 0.0, 0.1
+        for _ in range(max(1, min(b.epochs, 500))):
+            gw = sum(2 * (w * x + bb - y) * x for x, y in zip(xs, ys)) / len(xs)
+            gb = sum(2 * (w * x + bb - y) for x, y in zip(xs, ys)) / len(xs)
+            w, bb = w - lr * gw, bb - lr * gb
+        errs = [abs(w * x + bb - y) for x, y in zip(xs, ys)]
+        return {"ok": True, "w": round(w, 4), "b": round(bb, 4), "mae": round(sum(errs) / len(errs), 4)}
     except Exception as e:
         return {"ok": False, "error": str(e)}
 

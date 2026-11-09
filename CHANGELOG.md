@@ -1,4 +1,9 @@
 # Changelog
+## [0.18.0] — DS5: Deep Learning y NLP (2026-11-08)
+- `POST /labs/nlp/tokenize` (vocabulario real) y `POST /labs/dl/perceptron` (descenso de gradiente 1D) + páginas `/labs/nlp`, `/labs/dl`.
+- Verificado en vivo (`vocab_size 2`, `mae 0.0002`).
+- Tests: 22 passed.
+
 ## [0.17.0] — DS4: series temporales + equidad (2026-11-08)
 - `POST /labs/ts/forecast` (ingenuo + media móvil + anomalías ±3σ) y `POST /labs/ml/fairness` (precisión/recall por grupo) + páginas `/labs/series`, `/labs/equidad`.
 - Fix: denominador de media móvil corregido.
