@@ -38,6 +38,13 @@ def test_gamification_endpoints():
     assert client.post("/api/v1/me/avatar", json={"avatar": "avatar-1"}).status_code == 401
 
 
+def test_ds3_clustering():
+    r = client.post("/api/v1/labs/ml/clustering", json={"values": "1,2,1.5,10,11,10.5", "k": 2})
+    assert r.status_code == 200 and r.json()["ok"]
+    assert len(r.json()["groups"]) == 2
+    assert max(r.json()["centroids"]) > 10
+
+
 def test_ds2_metrics_algebra():
     r = client.post("/api/v1/labs/ml/metrics", json={"y_true": "1,0,1,0", "y_pred": "1,0,0,1"})
     assert r.status_code == 200 and r.json()["ok"]

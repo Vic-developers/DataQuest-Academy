@@ -98,6 +98,11 @@ class MetricsIn(BaseModel):
     y_pred: str = ""
 
 
+class ClusterIn(BaseModel):
+    values: str = ""  # "1,2,10,11"
+    k: int = 2
+
+
 class AlgebraIn(BaseModel):
     a: str = ""  # filas separadas por ; y columnas por coma, ej. "1,2;3,4"
     b: str = ""
@@ -324,6 +329,31 @@ def ml_split(b: MlIn):
         mae_test = sum(abs(y - (a + b_ * x)) for x, y in zip(xte, yte)) / len(xte)
         return {"ok": True, "a": round(a, 4), "b": round(b_, 4), "mae_train": round(mae_train, 4),
                 "mae_test": round(mae_test, 4), "n_train": len(xtr), "n_test": len(xte)}
+    except Exception as e:
+        return {"ok": False, "error": str(e)}
+
+
+@router.post("/labs/ml/clustering")
+def ml_clustering(b: ClusterIn):
+    """K-means 1D real (stdlib, inicialización determinista) — no simulado."""
+    try:
+        vals = [float(v) for v in b.values.replace(";", ",").split(",") if v.strip()]
+        if len(vals) < 2 or b.k < 1 or b.k > len(vals):
+            return {"ok": False, "error": "Indica al menos 2 valores y 1<=k<=n."}
+        s = sorted(vals)
+        # centroides iniciales equiespaciados (determinista)
+        centroids = [s[int(i * len(s) / b.k)] for i in range(b.k)]
+        for _ in range(100):
+            groups: dict[int, list[float]] = {i: [] for i in range(b.k)}
+            for v in vals:
+                j = min(range(b.k), key=lambda i: abs(v - centroids[i]))
+                groups[j].append(v)
+            new = [(sum(groups[i]) / len(groups[i]) if groups[i] else centroids[i]) for i in range(b.k)]
+            if new == centroids:
+                break
+            centroids = new
+        return {"ok": True, "centroids": [round(c, 4) for c in centroids],
+                "groups": {str(i): [round(v, 4) for v in groups[i]] for i in range(b.k)}}
     except Exception as e:
         return {"ok": False, "error": str(e)}
 

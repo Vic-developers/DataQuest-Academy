@@ -1,4 +1,9 @@
 # Changelog
+## [0.16.0] — DS3: clustering K-means (2026-11-08)
+- `POST /labs/ml/clustering` (K-means 1D determinista, stdlib real) + página `/labs/clustering`.
+- Verificado en vivo: centroides `[1.5, 10.5]`.
+- Tests: 20 passed.
+
 ## [0.15.0] — DS2: métricas y álgebra lineal (2026-11-08)
 - `POST /labs/ml/metrics` (TP/FP/FN/TN + precisión/recall/F1) y `POST /labs/algebra/matmul` (stdlib real) + páginas `/labs/metricas` y `/labs/algebra`.
 - Verificado en vivo (`F1 0.5`, `[[19,22],[43,50]]`).
