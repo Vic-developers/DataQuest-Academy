@@ -93,6 +93,16 @@ class AvatarIn(BaseModel):
     avatar: str = Field(min_length=1, max_length=50)
 
 
+class MetricsIn(BaseModel):
+    y_true: str = ""  # "1,0,1" (1 = positivo)
+    y_pred: str = ""
+
+
+class AlgebraIn(BaseModel):
+    a: str = ""  # filas separadas por ; y columnas por coma, ej. "1,2;3,4"
+    b: str = ""
+
+
 def current_user(token: str | None = Depends(oauth), db: Session = Depends(get_db)) -> User:
     if not token:
         raise HTTPException(401, "Token requerido")
@@ -314,6 +324,46 @@ def ml_split(b: MlIn):
         mae_test = sum(abs(y - (a + b_ * x)) for x, y in zip(xte, yte)) / len(xte)
         return {"ok": True, "a": round(a, 4), "b": round(b_, 4), "mae_train": round(mae_train, 4),
                 "mae_test": round(mae_test, 4), "n_train": len(xtr), "n_test": len(xte)}
+    except Exception as e:
+        return {"ok": False, "error": str(e)}
+
+
+@router.post("/labs/ml/metrics")
+def ml_metrics(b: MetricsIn):
+    """Precisión, recall y F1 binarios + matriz de confusión (stdlib)."""
+    try:
+        yt = [int(v) for v in b.y_true.replace(";", ",").split(",") if v.strip()]
+        yp = [int(v) for v in b.y_pred.replace(";", ",").split(",") if v.strip()]
+        if len(yt) != len(yp) or not yt:
+            return {"ok": False, "error": "y_true y y_pred deben tener la misma longitud."}
+        if any(v not in (0, 1) for v in yt + yp):
+            return {"ok": False, "error": "Solo se admiten etiquetas 0/1."}
+        tp = sum(1 for t, p in zip(yt, yp) if t == 1 and p == 1)
+        fp = sum(1 for t, p in zip(yt, yp) if t == 0 and p == 1)
+        fn = sum(1 for t, p in zip(yt, yp) if t == 1 and p == 0)
+        tn = sum(1 for t, p in zip(yt, yp) if t == 0 and p == 0)
+        precision = tp / (tp + fp) if (tp + fp) else 0.0
+        recall = tp / (tp + fn) if (tp + fn) else 0.0
+        f1 = 2 * precision * recall / (precision + recall) if (precision + recall) else 0.0
+        return {"ok": True, "tp": tp, "fp": fp, "fn": fn, "tn": tn,
+                "precision": round(precision, 4), "recall": round(recall, 4), "f1": round(f1, 4)}
+    except Exception as e:
+        return {"ok": False, "error": str(e)}
+
+
+@router.post("/labs/algebra/matmul")
+def algebra_matmul(b: AlgebraIn):
+    """Multiplicación de matrices A*B con stdlib. Formato: filas ';' y columnas ','."""
+    try:
+        def parse(s: str) -> list[list[float]]:
+            return [[float(v) for v in row.strip().split(",")] for row in s.strip().split(";") if row.strip()]
+        A, B = parse(b.a), parse(b.b)
+        if not A or not B:
+            return {"ok": False, "error": "Indica dos matrices no vacías."}
+        if len(A[0]) != len(B):
+            return {"ok": False, "error": f"Dimensiones incompatibles: A es {len(A)}x{len(A[0])}, B es {len(B)}x{len(B[0])}."}
+        C = [[round(sum(A[i][k] * B[k][j] for k in range(len(B))), 4) for j in range(len(B[0]))] for i in range(len(A))]
+        return {"ok": True, "result": C}
     except Exception as e:
         return {"ok": False, "error": str(e)}
 

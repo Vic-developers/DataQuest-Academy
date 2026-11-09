@@ -20,6 +20,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Link href="/labs/hojas">Hojas</Link>
             <Link href="/labs/viz">Gráficos</Link>
             <Link href="/labs/ml">ML</Link>
+            <Link href="/labs/metricas">Métricas</Link>
+            <Link href="/labs/algebra">Álgebra</Link>
             <Link href="/misiones">Misiones</Link>
             <Link href="/rankings">Rankings</Link>
             <Link href="/perfil">Perfil</Link>

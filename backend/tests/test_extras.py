@@ -38,6 +38,14 @@ def test_gamification_endpoints():
     assert client.post("/api/v1/me/avatar", json={"avatar": "avatar-1"}).status_code == 401
 
 
+def test_ds2_metrics_algebra():
+    r = client.post("/api/v1/labs/ml/metrics", json={"y_true": "1,0,1,0", "y_pred": "1,0,0,1"})
+    assert r.status_code == 200 and r.json()["ok"]
+    assert r.json()["tp"] == 1 and r.json()["fp"] == 1 and r.json()["fn"] == 1
+    r = client.post("/api/v1/labs/algebra/matmul", json={"a": "1,2;3,4", "b": "5,6;7,8"})
+    assert r.json()["result"] == [[19.0, 22.0], [43.0, 50.0]]
+
+
 def test_ml_split():
     r = client.post("/api/v1/labs/ml/split", json={"xs": "1,2,3,4,5,6,7,8,9,10", "ys": "2,4,6,8,10,12,14,16,18,20"})
     assert r.status_code == 200 and r.json()["ok"] and r.json()["n_train"] == 8 and r.json()["n_test"] == 2

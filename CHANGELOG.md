@@ -1,4 +1,9 @@
 # Changelog
+## [0.15.0] — DS2: métricas y álgebra lineal (2026-11-08)
+- `POST /labs/ml/metrics` (TP/FP/FN/TN + precisión/recall/F1) y `POST /labs/algebra/matmul` (stdlib real) + páginas `/labs/metricas` y `/labs/algebra`.
+- Verificado en vivo (`F1 0.5`, `[[19,22],[43,50]]`).
+- Tests: 19 passed.
+
 ## [0.14.0] — DS1: ruta Data Scientist (2026-11-08)
 - Mundos 11–22 (27 lecciones), +3 ejercicios, +1 proyecto p6-ds, +1 badge científico de datos. Total: 23 mundos, 72 lecciones, 21 ejercicios, 7 proyectos.
 - `data/prereqs.json` (grafo Analyst → Scientist) + `docs/ds/04-impacto-tecnico.md`.
