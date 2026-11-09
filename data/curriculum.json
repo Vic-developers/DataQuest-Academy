@@ -1170,6 +1170,39 @@
       ],
       "answer": "Tasas por grupo",
       "xp": 20
+    },
+    {
+      "lesson": "m4-vars",
+      "kind": "code",
+      "prompt": "Escribe una función que reciba dos números y retorne su suma.",
+      "asserts": [
+        "assert sumar(2,3) == 5",
+        "assert sumar(0,0) == 0",
+        "assert sumar(-1,1) == 0"
+      ],
+      "xp": 20
+    },
+    {
+      "lesson": "m4-listas",
+      "kind": "code",
+      "prompt": "Escribe una función que reciba una lista de números y retorne el valor máximo.",
+      "asserts": [
+        "assert maximo([1,5,3,9,2]) == 9",
+        "assert maximo([10]) == 10",
+        "assert maximo([-1,-5,-3]) == -1"
+      ],
+      "xp": 20
+    },
+    {
+      "lesson": "m4-funciones",
+      "kind": "code",
+      "prompt": "Escribe una función que reciba una lista y retorne una nueva lista solo con los números pares.",
+      "asserts": [
+        "assert pares([1,2,3,4,5,6]) == [2,4,6]",
+        "assert pares([1,3,5]) == []",
+        "assert pares([2,4,6]) == [2,4,6]"
+      ],
+      "xp": 20
     }
   ],
   "projects": [

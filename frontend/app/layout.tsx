@@ -8,7 +8,7 @@ export const metadata = {
 
 const groups: { title: string; items: [string, string, boolean?][] }[] = [
   { title: "Aprendizaje", items: [["/mapa", "Mapa de mundos", true], ["/dashboard", "Mi progreso"], ["/proyectos", "Proyectos"], ["/misiones", "Misiones diarias"], ["/rankings", "Rankings"]] },
-  { title: "Laboratorios", items: [["/labs/sql", "SQL"], ["/labs/python", "Python"], ["/labs/estadistico", "Estadística"], ["/labs/hojas", "Hojas de cálculo"], ["/labs/viz", "Visualización"], ["/labs/ml", "Regresión ML"], ["/labs/metricas", "Métricas ML"], ["/labs/algebra", "Álgebra lineal"], ["/labs/clustering", "Clustering"], ["/labs/series", "Series temporales"], ["/labs/equidad", "Equidad IA"], ["/labs/nlp", "NLP"], ["/labs/dl", "Deep Learning"]] },
+  { title: "Laboratorios", items: [["/labs/sql", "SQL"], ["/labs/python", "Python"], ["/labs/python/guided", "Python guiado"], ["/labs/estadistico", "Estadística"], ["/labs/hojas", "Hojas de cálculo"], ["/labs/viz", "Visualización"], ["/labs/ml", "Regresión ML"], ["/labs/metricas", "Métricas ML"], ["/labs/algebra", "Álgebra lineal"], ["/labs/clustering", "Clustering"], ["/labs/series", "Series temporales"], ["/labs/equidad", "Equidad IA"], ["/labs/nlp", "NLP"], ["/labs/dl", "Deep Learning"]] },
   { title: "Cuenta", items: [["/tutor", "DataMentor"], ["/certificados", "Certificados"], ["/perfil", "Perfil"], ["/admin", "Admin"]] },
 ];
 
