@@ -1,4 +1,8 @@
 # Changelog
+## [0.19.0] — DS7: certificación interna DS (2026-11-08)
+- `POST /certificates/ds` (≥500 XP y ≥10 lecciones; 403 en caso contrario, verificado en vivo) + botón en `/certificados`. Interna, no oficial.
+- Tests: 23 passed.
+
 ## [0.18.0] — DS5: Deep Learning y NLP (2026-11-08)
 - `POST /labs/nlp/tokenize` (vocabulario real) y `POST /labs/dl/perceptron` (descenso de gradiente 1D) + páginas `/labs/nlp`, `/labs/dl`.
 - Verificado en vivo (`vocab_size 2`, `mae 0.0002`).

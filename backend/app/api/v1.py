@@ -280,6 +280,20 @@ def issue(u: User = Depends(current_user), db: Session = Depends(get_db)):
     return {"code": code}
 
 
+@router.post("/certificates/ds")
+def issue_ds(u: User = Depends(current_user), db: Session = Depends(get_db)):
+    p = db.query(Profile).filter(Profile.user_id == u.id).first()
+    xp = p.total_xp if p else 0
+    done = db.query(Progress).filter(Progress.user_id == u.id, Progress.completed == True).count()
+    # Certificado interno por evidencias (no es acreditación oficial).
+    if xp < 500 or done < 10:
+        raise HTTPException(403, "Aún no cumples evidencias DS: necesitas >=500 XP y >=10 lecciones completadas.")
+    code = f"DS-{secrets.token_hex(4).upper()}"
+    c = Certificate(user_id=u.id, code=code, title="Certificación interna Data Scientist — DataQuest Academy (no oficial)")
+    db.add(c); db.commit()
+    return {"code": code, "xp": xp, "lessons": done}
+
+
 @router.get("/certificates/verify/{code}")
 def verify(code: str, db: Session = Depends(get_db)):
     c = db.query(Certificate).filter(Certificate.code == code).first()
