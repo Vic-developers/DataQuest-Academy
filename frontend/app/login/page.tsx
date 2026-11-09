@@ -10,15 +10,15 @@ export default function Login() {
       localStorage.setItem("dq_token", r.access_token); window.location.href = "/dashboard";
     } catch { setMsg("Credenciales inválidas o cuenta inexistente."); }
   }
-  return <div className="min-h-[70vh] grid place-items-center">
+  return <div className="min-h-[75vh] grid place-items-center py-10">
     <form onSubmit={go} className="card w-full max-w-md">
-      <span className="chip chip-brand">Bienvenido de vuelta</span>
-      <h1 className="mt-3 text-2xl font-bold">Iniciar sesión</h1>
-      <label className="block mt-4 text-sm text-[#c7cde8]">Email<input className="input mt-1" value={email} onChange={e => setEmail(e.target.value)} required /></label>
-      <label className="block mt-3 text-sm text-[#c7cde8]">Contraseña<input type="password" className="input mt-1" value={password} onChange={e => setPassword(e.target.value)} required /></label>
-      <button className="btn btn-primary w-full justify-center mt-4">Entrar</button>
-      {msg && <p role="alert" className="mt-3 text-sm text-rose-300">{msg}</p>}
-      <p className="mt-4 text-sm text-[#8b98c0]">¿Sin cuenta? <Link className="text-[var(--brand-2)] hover:underline" href="/register">Regístrate</Link></p>
+      <p className="font-mono text-[11px] uppercase tracking-widest text-[#8a8577]">Acceso</p>
+      <h1 className="font-display mt-1 text-3xl font-semibold">Entrar</h1>
+      <label className="block mt-5 text-sm font-medium">Email<input className="input mt-1" value={email} onChange={e => setEmail(e.target.value)} required /></label>
+      <label className="block mt-4 text-sm font-medium">Contraseña<input type="password" className="input mt-1" value={password} onChange={e => setPassword(e.target.value)} required /></label>
+      <button className="btn btn-accent w-full justify-center mt-5">Entrar</button>
+      {msg && <p role="alert" className="mt-3 text-sm text-red-700">{msg}</p>}
+      <p className="mt-5 text-sm text-[#5c574c]">¿Sin cuenta? <Link className="font-semibold text-[var(--accent-dark)] underline underline-offset-2" href="/register">Regístrate</Link></p>
     </form>
   </div>;
 }
