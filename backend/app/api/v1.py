@@ -103,6 +103,17 @@ class ClusterIn(BaseModel):
     k: int = 2
 
 
+class SeriesIn(BaseModel):
+    values: str = ""  # serie temporal "10,12,11,13,20"
+    window: int = 3
+
+
+class FairnessIn(BaseModel):
+    groups: str = ""  # "A,A,B,B"
+    y_true: str = ""
+    y_pred: str = ""
+
+
 class AlgebraIn(BaseModel):
     a: str = ""  # filas separadas por ; y columnas por coma, ej. "1,2;3,4"
     b: str = ""
@@ -354,6 +365,47 @@ def ml_clustering(b: ClusterIn):
             centroids = new
         return {"ok": True, "centroids": [round(c, 4) for c in centroids],
                 "groups": {str(i): [round(v, 4) for v in groups[i]] for i in range(b.k)}}
+    except Exception as e:
+        return {"ok": False, "error": str(e)}
+
+
+@router.post("/labs/ts/forecast")
+def ts_forecast(b: SeriesIn):
+    """Forecast ingenuo (último valor) + media móvil + anomalías ±3σ (stdlib real)."""
+    try:
+        vals = [float(v) for v in b.values.replace(";", ",").split(",") if v.strip()]
+        if len(vals) < 2 or b.window < 1:
+            return {"ok": False, "error": "Indica al menos 2 valores y window>=1."}
+        naive = vals[-1]
+        ma = [round(sum(vals[i:i+b.window]) / max(1, len(vals[i:i+b.window])), 4) for i in range(len(vals))] if b.window else []
+        import statistics
+        mu = statistics.mean(vals)
+        sd = statistics.pstdev(vals) if len(vals) > 1 else 0.0
+        anomalies = [i for i, v in enumerate(vals) if sd > 0 and abs(v - mu) > 3 * sd]
+        return {"ok": True, "naive": naive, "moving_avg": ma, "mean": round(mu, 4), "pstdev": round(sd, 4), "anomaly_indices": anomalies}
+    except Exception as e:
+        return {"ok": False, "error": str(e)}
+
+
+@router.post("/labs/ml/fairness")
+def ml_fairness(b: FairnessIn):
+    """Auditoría de equidad: precisión/recall por grupo (stdlib real)."""
+    try:
+        g = [x.strip() for x in b.groups.replace(";", ",").split(",")]
+        yt = [int(v) for v in b.y_true.replace(";", ",").split(",") if v.strip()]
+        yp = [int(v) for v in b.y_pred.replace(";", ",").split(",") if v.strip()]
+        if len(g) != len(yt) or len(g) != len(yp) or not g:
+            return {"ok": False, "error": "groups, y_true y y_pred deben tener la misma longitud."}
+        out = {}
+        for grp in sorted(set(g)):
+            idx = [i for i, x in enumerate(g) if x == grp]
+            tp = sum(1 for i in idx if yt[i] == 1 and yp[i] == 1)
+            fp = sum(1 for i in idx if yt[i] == 0 and yp[i] == 1)
+            fn = sum(1 for i in idx if yt[i] == 1 and yp[i] == 0)
+            prec = tp / (tp + fp) if (tp + fp) else 0.0
+            rec = tp / (tp + fn) if (tp + fn) else 0.0
+            out[grp] = {"precision": round(prec, 4), "recall": round(rec, 4), "n": len(idx)}
+        return {"ok": True, "by_group": out}
     except Exception as e:
         return {"ok": False, "error": str(e)}
 

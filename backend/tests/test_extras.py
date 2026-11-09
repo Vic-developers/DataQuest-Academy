@@ -38,6 +38,13 @@ def test_gamification_endpoints():
     assert client.post("/api/v1/me/avatar", json={"avatar": "avatar-1"}).status_code == 401
 
 
+def test_ds4_series_equidad():
+    r = client.post("/api/v1/labs/ts/forecast", json={"values": "10,12,11,13,12,20", "window": 3})
+    assert r.json()["ok"] and r.json()["naive"] == 20.0
+    r = client.post("/api/v1/labs/ml/fairness", json={"groups": "A,A,B,B", "y_true": "1,1,0,0", "y_pred": "1,0,0,0"})
+    assert r.json()["ok"] and "A" in r.json()["by_group"]
+
+
 def test_ds3_clustering():
     r = client.post("/api/v1/labs/ml/clustering", json={"values": "1,2,1.5,10,11,10.5", "k": 2})
     assert r.status_code == 200 and r.json()["ok"]

@@ -1,4 +1,9 @@
 # Changelog
+## [0.17.0] — DS4: series temporales + equidad (2026-11-08)
+- `POST /labs/ts/forecast` (ingenuo + media móvil + anomalías ±3σ) y `POST /labs/ml/fairness` (precisión/recall por grupo) + páginas `/labs/series`, `/labs/equidad`.
+- Fix: denominador de media móvil corregido.
+- Tests: 21 passed.
+
 ## [0.16.0] — DS3: clustering K-means (2026-11-08)
 - `POST /labs/ml/clustering` (K-means 1D determinista, stdlib real) + página `/labs/clustering`.
 - Verificado en vivo: centroides `[1.5, 10.5]`.
