@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import Link from "next/link";
 import { api } from "@/lib/api";
 export default function Login() {
   const [email, setEmail] = useState(""), [password, setPassword] = useState(""), [msg, setMsg] = useState("");
@@ -7,13 +8,17 @@ export default function Login() {
     e.preventDefault();
     try { const r = await api("/api/v1/auth/login", { method: "POST", body: JSON.stringify({ email, password }) });
       localStorage.setItem("dq_token", r.access_token); window.location.href = "/dashboard";
-    } catch (err: any) { setMsg("Credenciales inválidas. ¿No tienes cuenta? Regístrate."); }
+    } catch { setMsg("Credenciales inválidas o cuenta inexistente."); }
   }
-  return <form onSubmit={go} className="mx-auto max-w-md space-y-3">
-    <h1 className="text-2xl font-bold">Iniciar sesión</h1>
-    <label className="block">Email<input className="w-full border rounded px-3 py-2" value={email} onChange={e => setEmail(e.target.value)} required /></label>
-    <label className="block">Contraseña<input type="password" className="w-full border rounded px-3 py-2" value={password} onChange={e => setPassword(e.target.value)} required /></label>
-    <button className="rounded bg-blue-600 px-4 py-2 text-white">Entrar</button>
-    {msg && <p role="alert">{msg}</p>}
-  </form>;
+  return <div className="min-h-[70vh] grid place-items-center">
+    <form onSubmit={go} className="card w-full max-w-md">
+      <span className="chip chip-brand">Bienvenido de vuelta</span>
+      <h1 className="mt-3 text-2xl font-bold">Iniciar sesión</h1>
+      <label className="block mt-4 text-sm text-[#c7cde8]">Email<input className="input mt-1" value={email} onChange={e => setEmail(e.target.value)} required /></label>
+      <label className="block mt-3 text-sm text-[#c7cde8]">Contraseña<input type="password" className="input mt-1" value={password} onChange={e => setPassword(e.target.value)} required /></label>
+      <button className="btn btn-primary w-full justify-center mt-4">Entrar</button>
+      {msg && <p role="alert" className="mt-3 text-sm text-rose-300">{msg}</p>}
+      <p className="mt-4 text-sm text-[#8b98c0]">¿Sin cuenta? <Link className="text-[var(--brand-2)] hover:underline" href="/register">Regístrate</Link></p>
+    </form>
+  </div>;
 }

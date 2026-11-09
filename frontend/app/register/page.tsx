@@ -8,13 +8,16 @@ export default function Register() {
     try { await api("/api/v1/auth/register", { method: "POST", body: JSON.stringify({ email, password }) });
       const r = await api("/api/v1/auth/login", { method: "POST", body: JSON.stringify({ email, password }) });
       localStorage.setItem("dq_token", r.access_token); window.location.href = "/dashboard";
-    } catch { setMsg("Error al registrarse. Prueba con otro email."); }
+    } catch { setMsg("Error al registrarse. Prueba con otro email (mín. 8 caracteres)."); }
   }
-  return <form onSubmit={go} className="mx-auto max-w-md space-y-3">
-    <h1 className="text-2xl font-bold">Crear cuenta</h1>
-    <label className="block">Email<input className="w-full border rounded px-3 py-2" value={email} onChange={e => setEmail(e.target.value)} required /></label>
-    <label className="block">Contraseña (mín. 8)<input type="password" className="w-full border rounded px-3 py-2" value={password} onChange={e => setPassword(e.target.value)} required /></label>
-    <button className="rounded bg-blue-600 px-4 py-2 text-white">Registrarse</button>
-    {msg && <p role="alert">{msg}</p>}
-  </form>;
+  return <div className="min-h-[70vh] grid place-items-center">
+    <form onSubmit={go} className="card w-full max-w-md">
+      <span className="chip chip-brand">Empieza hoy</span>
+      <h1 className="mt-3 text-2xl font-bold">Crear cuenta</h1>
+      <label className="block mt-4 text-sm text-[#c7cde8]">Email<input className="input mt-1" value={email} onChange={e => setEmail(e.target.value)} required /></label>
+      <label className="block mt-3 text-sm text-[#c7cde8]">Contraseña (mín. 8)<input type="password" className="input mt-1" value={password} onChange={e => setPassword(e.target.value)} required /></label>
+      <button className="btn btn-primary w-full justify-center mt-4">Crear cuenta</button>
+      {msg && <p role="alert" className="mt-3 text-sm text-rose-300">{msg}</p>}
+    </form>
+  </div>;
 }

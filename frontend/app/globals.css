@@ -1,5 +1,53 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
-:focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
+
+:root {
+  --bg: #0b1020;
+  --panel: #111a33;
+  --panel-2: #16203f;
+  --text: #e8ecf6;
+  --muted: #9aa6c8;
+  --brand: #6366f1;
+  --brand-2: #22d3ee;
+  --accent: #f59e0b;
+  --ring: #818cf8;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  color: var(--text);
+  background: radial-gradient(1200px 600px at 15% -10%, rgba(99,102,241,.25), transparent 60%),
+              radial-gradient(900px 500px at 110% 10%, rgba(34,211,238,.18), transparent 55%),
+              var(--bg);
+}
+
+.code-mono { font-family: 'JetBrains Mono', monospace; }
+
+/* ---------- Components ---------- */
+@layer components {
+  .btn { @apply inline-flex items-center gap-2 rounded-xl px-4 py-2.5 font-semibold transition-all; }
+  .btn-primary { background: linear-gradient(135deg, var(--brand), var(--brand-2)); color: #0b1020; box-shadow: 0 10px 30px rgba(99,102,241,.35); }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 14px 40px rgba(34,211,238,.35); }
+  .btn-ghost { border: 1px solid rgba(255,255,255,.15); background: rgba(255,255,255,.04); color: var(--text); }
+  .btn-ghost:hover { background: rgba(255,255,255,.09); }
+
+  .card { @apply rounded-2xl border p-5; background: linear-gradient(180deg, var(--panel), var(--panel-2)); border-color: rgba(255,255,255,.08); box-shadow: 0 10px 40px rgba(0,0,0,.35); }
+  .card-hover { transition: transform .18s ease; }
+  .card-hover:hover { transform: translateY(-4px); }
+
+  .input { @apply w-full rounded-xl border px-4 py-2.5 outline-none transition-all; background: rgba(255,255,255,.05); border-color: rgba(255,255,255,.12); color: var(--text); }
+  .input::placeholder { color: var(--muted); }
+  .input:focus { border-color: var(--ring); box-shadow: 0 0 0 3px rgba(129,140,248,.2); }
+
+  .chip { @apply inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium; }
+  .chip-brand { border-color: rgba(99,102,241,.5); background: rgba(99,102,241,.15); color: #a5b4fc; }
+
+  .stat-card { @apply rounded-2xl border p-4 flex flex-col gap-1; background: linear-gradient(180deg, var(--panel), var(--panel-2)); border-color: rgba(255,255,255,.08); }
+
+  .focus-ring:focus-visible { outline: 3px solid var(--ring); outline-offset: 2px; }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+  @focus-visible { outline: 3px solid var(--ring); outline-offset: 2px; }
+}
