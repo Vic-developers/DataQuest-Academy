@@ -587,6 +587,344 @@
           "status": "published"
         }
       ]
+    },
+    {
+      "code": "mundo-11",
+      "title": "Mundo 11 — Matemáticas para Ciencia de Datos",
+      "description": "Álgebra lineal y cálculo aplicados. Fase DS1/DS2.",
+      "order": 11,
+      "lessons": [
+        {
+          "code": "m11-algebra",
+          "title": "Álgebra lineal avanzada",
+          "objective": "Aplicar matrices y descomposiciones conceptuales.",
+          "competency": "Álgebra lineal DS",
+          "content": "Matriz A (m×n) transforma vectores. Transpuesta, determinante e inversa conceptuales: Ax=b. PCA usa vectores propios. Ejemplo: proyectar iris_sintetico a 1D conserva gran parte de la varianza.",
+          "duration": 30,
+          "order": 1,
+          "status": "published"
+        },
+        {
+          "code": "m11-calculo",
+          "title": "Cálculo y optimización",
+          "objective": "Interpretar derivadas en optimización.",
+          "competency": "Cálculo aplicado",
+          "content": "Derivada = pendiente instantánea. Descenso de gradiente: x := x - lr*grad. lr demasiado grande diverge; demasiado pequeño tarda. Error común: no escalar variables antes de optimizar.",
+          "duration": 30,
+          "order": 2,
+          "status": "published"
+        }
+      ],
+      "status": "planned"
+    },
+    {
+      "code": "mundo-12",
+      "title": "Mundo 12 — Programación científica avanzada",
+      "description": "NumPy, Pandas y SciPy. Fase DS2.",
+      "order": 12,
+      "lessons": [
+        {
+          "code": "m12-numpy",
+          "title": "NumPy vectorizado",
+          "objective": "Usar arrays y broadcasting.",
+          "competency": "NumPy",
+          "content": "X = np.array(...); X.mean(axis=0) vectoriza por columna. Broadcasting expande dimensiones compatibles. Compara con bucle: menos líneas y más rápido en datos grandes.",
+          "duration": 30,
+          "order": 1,
+          "status": "published"
+        },
+        {
+          "code": "m12-pandas",
+          "title": "Pandas para ciencia de datos",
+          "objective": "Analizar DataFrames con groupby y merge.",
+          "competency": "Pandas DS",
+          "content": "df.groupby('region').agg({'unidades':'sum'}), df.merge(...) y df.pivot_table. La lógica ya la practicaste con csv/SQL; aquí la aplicas con API pandas en entorno científico.",
+          "duration": 30,
+          "order": 2,
+          "status": "published"
+        }
+      ],
+      "status": "planned"
+    },
+    {
+      "code": "mundo-13",
+      "title": "Mundo 13 — ML supervisado",
+      "description": "Regresión, clasificación y árboles.",
+      "order": 13,
+      "lessons": [
+        {
+          "code": "m13-clasificacion",
+          "title": "Clasificación y validación",
+          "objective": "Clasificar con split y métricas.",
+          "competency": "Clasificación",
+          "content": "Clasificador predice etiqueta discreta. Con split 80/20 (seed 42) evitas fuga de datos. Precisión/recall/F1 se calculan en el lab de métricas.",
+          "duration": 30,
+          "order": 1,
+          "status": "published"
+        },
+        {
+          "code": "m13-arboles",
+          "title": "Árboles y Random Forest (concepto)",
+          "objective": "Explicar árboles y ensembles.",
+          "competency": "Árboles",
+          "content": "Árbol divide por la variable que más reduce impureza. Random Forest promedia muchos árboles descorrelacionados (bagging). Overfitting se controla con profundidad y mínimo de muestras.",
+          "duration": 30,
+          "order": 2,
+          "status": "published"
+        }
+      ],
+      "status": "planned"
+    },
+    {
+      "code": "mundo-14",
+      "title": "Mundo 14 — ML no supervisado",
+      "description": "Clustering y reducción de dimensionalidad.",
+      "order": 14,
+      "lessons": [
+        {
+          "code": "m14-clustering",
+          "title": "K-means y PCA",
+          "objective": "Agrupar sin etiquetas y reducir dimensiones.",
+          "competency": "Clustering",
+          "content": "K-means minimiza distancia intra-cluster. El lab ejecuta K-means 1D real. Escala variables antes (z-score) o las distancias se sesgan.",
+          "duration": 30,
+          "order": 1,
+          "status": "published"
+        },
+        {
+          "code": "m14-pca2",
+          "title": "PCA en la práctica",
+          "objective": "Interpretar componentes principales.",
+          "competency": "PCA",
+          "content": "PC1 maximiza varianza proyectada. Varianza explicada = % conservado. Útil para visualizar datos de alta dimensión en 2D.",
+          "duration": 25,
+          "order": 2,
+          "status": "published"
+        }
+      ],
+      "status": "planned"
+    },
+    {
+      "code": "mundo-15",
+      "title": "Mundo 15 — Ingeniería y evaluación de modelos",
+      "description": "Pipelines, fuga de datos y métricas.",
+      "order": 15,
+      "lessons": [
+        {
+          "code": "m15-pipeline",
+          "title": "Pipelines sin fuga",
+          "objective": "Construir un pipeline correcto.",
+          "competency": "Pipelines ML",
+          "content": "Orden: split → ajuste de escaladores solo con train → entrenamiento → evaluación en test. Ajustar el escalador con todo el dataset es fuga de datos.",
+          "duration": 30,
+          "order": 1,
+          "status": "published"
+        },
+        {
+          "code": "m15-metricas2",
+          "title": "Métricas y calibración",
+          "objective": "Elegir la métrica adecuada.",
+          "competency": "Métricas",
+          "content": "Clases desbalanceadas: F1 o AUC sobre accuracy. Calibración: ¿la probabilidad 0.8 acierta ~80%? Documenta la matriz de confusión completa, no solo un número.",
+          "duration": 25,
+          "order": 2,
+          "status": "published"
+        }
+      ],
+      "status": "planned"
+    },
+    {
+      "code": "mundo-16",
+      "title": "Mundo 16 — Series temporales",
+      "description": "Forecasting y detección de anomalías.",
+      "order": 16,
+      "lessons": [
+        {
+          "code": "m16-forecast",
+          "title": "Forecasting básico",
+          "objective": "Pronosticar con línea base.",
+          "competency": "Forecasting",
+          "content": "Línea base ingenua = último valor. Si tu modelo no supera la línea base, no aporta. Evalúa con ventana deslizante, no al azar (hay orden temporal).",
+          "duration": 30,
+          "order": 1,
+          "status": "published"
+        },
+        {
+          "code": "m16-anomalias",
+          "title": "Detección de anomalías",
+          "objective": "Detectar valores atípicos temporales.",
+          "competency": "Anomalías",
+          "content": "Método: residuo vs media móvil ±3σ. Falsos positivos y umbrales se ajustan al costo del negocio, no solo a estadística.",
+          "duration": 25,
+          "order": 2,
+          "status": "published"
+        }
+      ],
+      "status": "planned"
+    },
+    {
+      "code": "mundo-17",
+      "title": "Mundo 17 — Deep Learning",
+      "description": "Redes neuronales y PyTorch (concepto + lab).",
+      "order": 17,
+      "lessons": [
+        {
+          "code": "m17-redes",
+          "title": "Redes neuronales MLP",
+          "objective": "Explicar perceptrón multicapa.",
+          "competency": "Deep Learning intro",
+          "content": "MLP apila capas densas con activaciones (ReLU). Entrenamiento por backpropagation con descenso de gradiente. El lab ML muestra regresión; aquí interpretas el grafo de cómputo.",
+          "duration": 35,
+          "order": 1,
+          "status": "published"
+        },
+        {
+          "code": "m17-pytorch",
+          "title": "PyTorch y entrenamiento",
+          "objective": "Describir un bucle de entrenamiento.",
+          "competency": "PyTorch intro",
+          "content": "Bucle: forward → loss → backward → step. Tensors en CPU/GPU. Reproducibilidad: seeds, versiones y datos versionados (MLflow en Fase DS6).",
+          "duration": 30,
+          "order": 2,
+          "status": "published"
+        }
+      ],
+      "status": "planned"
+    },
+    {
+      "code": "mundo-18",
+      "title": "Mundo 18 — NLP",
+      "description": "Texto, embeddings y transformers (concepto).",
+      "order": 18,
+      "lessons": [
+        {
+          "code": "m18-tokenizacion",
+          "title": "Tokenización y embeddings",
+          "objective": "Preparar texto para modelos.",
+          "competency": "NLP intro",
+          "content": "Tokenización divide texto en unidades. Embeddings mapean tokens a vectores densos donde cercanía ≈ similitud semántica. Normaliza y maneja minúsculas de forma consistente.",
+          "duration": 30,
+          "order": 1,
+          "status": "published"
+        },
+        {
+          "code": "m18-transformers",
+          "title": "Transformers",
+          "objective": "Explicar atención (attention).",
+          "competency": "Transformers",
+          "content": "Atención pondera qué tokens importan para cada posición. Los transformers dominan traducción y clasificación de texto. Costo computacional: crece con la longitud.",
+          "duration": 30,
+          "order": 2,
+          "status": "published"
+        }
+      ],
+      "status": "planned"
+    },
+    {
+      "code": "mundo-19",
+      "title": "Mundo 19 — IA generativa",
+      "description": "LLM, RAG y evaluación de salidas.",
+      "order": 19,
+      "lessons": [
+        {
+          "code": "m19-llm",
+          "title": "LLM y prompting",
+          "objective": "Diseñar prompts verificables.",
+          "competency": "IA generativa",
+          "content": "Prompt específico + contexto + criterio de salida. Verifica siempre contra fuentes: los LLM alucinan. RAG (búsqueda en tus documentos) reduce alucinaciones.",
+          "duration": 30,
+          "order": 1,
+          "status": "published"
+        },
+        {
+          "code": "m19-evaluacion",
+          "title": "Evaluación de IA generativa",
+          "objective": "Evaluar salidas con rúbrica.",
+          "competency": "Evaluación GenAI",
+          "content": "Rúbrica: fidelidad a fuentes, utilidad, tono, seguridad. Humano-en-el-bucle para alto impacto. Registra prompts y versiones (trazabilidad).",
+          "duration": 30,
+          "order": 2,
+          "status": "published"
+        }
+      ],
+      "status": "planned"
+    },
+    {
+      "code": "mundo-20",
+      "title": "Mundo 20 — MLOps",
+      "description": "Versionado, despliegue y monitoreo.",
+      "order": 20,
+      "lessons": [
+        {
+          "code": "m20-mlflow",
+          "title": "Experimentos con MLflow",
+          "objective": "Registrar experimentos reproducibles.",
+          "competency": "MLOps intro",
+          "content": "MLflow registra parámetros, métricas y artefactos por corrida. Semilla fija (42) + versión de datos = reproducible. Error común: comparar corridas con distintos datasets.",
+          "duration": 30,
+          "order": 1,
+          "status": "published"
+        },
+        {
+          "code": "m20-despliegue",
+          "title": "Despliegue y monitoreo",
+          "objective": "Explicar despliegue y drift.",
+          "competency": "Despliegue ML",
+          "content": "Modelo empaquetado (Docker) sirve predicciones por API. Monitorea drift (cambio de distribuciones) y rendimiento en datos nuevos. Retrenar solo con evidencia, no por calendario.",
+          "duration": 30,
+          "order": 2,
+          "status": "published"
+        }
+      ],
+      "status": "planned"
+    },
+    {
+      "code": "mundo-21",
+      "title": "Mundo 21 — Ciencia de Datos responsable",
+      "description": "Ética, equidad y auditoría de modelos.",
+      "order": 21,
+      "lessons": [
+        {
+          "code": "m21-equidad",
+          "title": "Equidad y sesgos",
+          "objective": "Auditar sesgos por grupo.",
+          "competency": "Equidad algorítmica",
+          "content": "Mide tasas por grupo (p. ej. precisión por región en ventas). Un modelo global puede ser malo para un grupo minoritario. El lab de auditoría cuantifica la brecha.",
+          "duration": 30,
+          "order": 1,
+          "status": "published"
+        },
+        {
+          "code": "m21-ia-responsable",
+          "title": "IA responsable",
+          "objective": "Aplicar principios de IA responsable.",
+          "competency": "IA responsable",
+          "content": "Transparencia, supervisión humana, privacidad (sin datos personales innecesarios) y documentación de limitaciones. La certificación interna exige este análisis.",
+          "duration": 30,
+          "order": 2,
+          "status": "published"
+        }
+      ],
+      "status": "planned"
+    },
+    {
+      "code": "mundo-22",
+      "title": "Mundo 22 — Proyecto profesional integrador DS",
+      "description": "Proyecto final de la ruta Data Scientist.",
+      "order": 22,
+      "lessons": [
+        {
+          "code": "m22-integracion",
+          "title": "Proyecto integrador DS",
+          "objective": "Construir y documentar un modelo completo.",
+          "competency": "Proyecto integrador DS",
+          "content": "Pipeline completo sobre un dataset versionado: pregunta, datos, baseline, modelo, métricas, auditoría, documentación y reproducibilidad. Entrega p6-ds en el centro de proyectos.",
+          "duration": 45,
+          "order": 1,
+          "status": "published"
+        }
+      ],
+      "status": "planned"
     }
   ],
   "exercises": [
@@ -793,6 +1131,45 @@
       ],
       "answer": "Precisión y recall",
       "xp": 20
+    },
+    {
+      "lesson": "m13-clasificacion",
+      "kind": "mcq",
+      "prompt": "La validación correcta evita:",
+      "options": [
+        "Fuga de datos",
+        "Dividir en train/test",
+        "Usar métricas",
+        "Documentar"
+      ],
+      "answer": "Fuga de datos",
+      "xp": 20
+    },
+    {
+      "lesson": "m15-pipeline",
+      "kind": "mcq",
+      "prompt": "El escalador se ajusta:",
+      "options": [
+        "Solo con train",
+        "Con todo el dataset",
+        "Con el test",
+        "Antes del split"
+      ],
+      "answer": "Solo con train",
+      "xp": 20
+    },
+    {
+      "lesson": "m21-equidad",
+      "kind": "mcq",
+      "prompt": "Una auditoría de equidad mide:",
+      "options": [
+        "Tasas por grupo",
+        "Solo precisión global",
+        "Velocidad de CPU",
+        "Tamaño del modelo"
+      ],
+      "answer": "Tasas por grupo",
+      "xp": 20
     }
   ],
   "projects": [
@@ -831,6 +1208,12 @@
       "title": "Proyecto final: modelo predictivo",
       "description": "Regresion lineal sobre iris_sintetico.csv con evaluacion y documentacion.",
       "rubric": "Codigo / metricas / sin fuga de datos / limitaciones / reproducibilidad"
+    },
+    {
+      "code": "p6-ds",
+      "title": "Proyecto integrador DS",
+      "description": "Modelo completo reproducible con auditoría y documentación sobre dataset versionado.",
+      "rubric": "Pipeline sin fuga / métricas / equidad / reproducibilidad / documentación"
     }
   ],
   "missions": [
@@ -865,6 +1248,10 @@
     {
       "code": "proyecto-profesional",
       "title": "Proyecto profesional completado"
+    },
+    {
+      "code": "cientifico-datos",
+      "title": "Científico de Datos"
     }
   ]
 }

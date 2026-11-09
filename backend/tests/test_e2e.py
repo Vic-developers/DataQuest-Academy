@@ -16,7 +16,8 @@ def test_recorrido_completo_y_editor_admin():
     tok = client.post("/api/v1/auth/login", json={"email": email, "password": "password123"}).json()["access_token"]
     H = {"Authorization": f"Bearer {tok}"}
     worlds = client.get("/api/v1/worlds").json()
-    assert len(worlds) == 11
+    assert len(worlds) == 23
+    assert worlds[-1]["code"] == "mundo-22"
     lessons = client.get(f"/api/v1/worlds/{worlds[0]['id']}/lessons").json()
     assert len(lessons) > 0
     # el usuario estudiante NO puede usar el editor (403)

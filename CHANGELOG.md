@@ -1,4 +1,10 @@
 # Changelog
+## [0.14.0] — DS1: ruta Data Scientist (2026-11-08)
+- Mundos 11–22 (27 lecciones), +3 ejercicios, +1 proyecto p6-ds, +1 badge científico de datos. Total: 23 mundos, 72 lecciones, 21 ejercicios, 7 proyectos.
+- `data/prereqs.json` (grafo Analyst → Scientist) + `docs/ds/04-impacto-tecnico.md`.
+- Fix: `starlette==0.38.6` para FastAPI 0.115 (antes 1.10 incompatible); smoke/tests actualizados a 23 mundos.
+- Tests: 18 passed.
+
 ## [0.13.0] — Rate limit + carga en CI (2026-11-06)
 - Rate limit en memoria (200 req/min por IP, `/health` exento) + paso de carga en CI con `loadtest_adv.py`.
 - Verificado en vivo: smoke OK + carga 30/30 OK.

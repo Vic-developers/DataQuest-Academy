@@ -20,11 +20,11 @@ def main():
     email = f"e2e-{uuid.uuid4().hex[:8]}@test.com"
     s, _ = req("POST", "/api/v1/auth/register", {"email": email, "password": "password123"}); assert s == 200
     s, t = req("POST", "/api/v1/auth/login", {"email": email, "password": "password123"}); tok = t["access_token"]
-    s, worlds = req("GET", "/api/v1/worlds"); assert len(worlds) == 11, worlds
+    s, worlds = req("GET", "/api/v1/worlds"); assert len(worlds) == 23, worlds
     s, sql = req("POST", "/api/v1/labs/sql/run", {"query": "SELECT 1 AS x"}); assert sql["ok"]
     s, py = req("POST", "/api/v1/labs/python/run", {"code": "print(10+5)"}); assert py["stdout"].strip() == "15"
     s, st = req("POST", "/api/v1/labs/stats", {"values": "1,2,3"}); assert abs(st["mean"] - 2.0) < 1e-9
-    print("SMOKE OK: auth + mundos(11) + sql + python + stats")
+    print("SMOKE OK: auth + mundos(23) + sql + python + stats")
 
 if __name__ == "__main__":
     main()
