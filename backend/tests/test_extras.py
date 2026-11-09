@@ -38,6 +38,17 @@ def test_gamification_endpoints():
     assert client.post("/api/v1/me/avatar", json={"avatar": "avatar-1"}).status_code == 401
 
 
+def test_ds6_mlops():
+    import uuid as _u
+    em = f"mlops2-{_u.uuid4().hex[:8]}@test.com"
+    client.post("/api/v1/auth/register", json={"email": em, "password": "password123"})
+    tok = client.post("/api/v1/auth/login", json={"email": em, "password": "password123"}).json()["access_token"]
+    H = {"Authorization": f"Bearer {tok}"}
+    r = client.post("/api/v1/labs/mlops/log", json={"name": "regresion-v1", "params": "seed=42,lr=0.1", "metrics": "mae=0.5"}, headers=H)
+    assert r.status_code == 200 and r.json()["run_id"] >= 1
+    assert len(client.get("/api/v1/labs/mlops/runs").json()) >= 1
+
+
 def test_ds5_nlp_dl():
     r = client.post("/api/v1/labs/nlp/tokenize", json={"text": "Hola Hola mundo"})
     assert r.json()["ok"] and r.json()["vocab_size"] == 2

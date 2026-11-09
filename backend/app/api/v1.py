@@ -124,6 +124,12 @@ class DlIn(BaseModel):
     epochs: int = 50
 
 
+class RunIn(BaseModel):
+    name: str = ""
+    params: str = ""  # "lr=0.1,seed=42"
+    metrics: str = ""  # "mae=0.5"
+
+
 class AlgebraIn(BaseModel):
     a: str = ""  # filas separadas por ; y columnas por coma, ej. "1,2;3,4"
     b: str = ""
@@ -418,6 +424,25 @@ def ml_fairness(b: FairnessIn):
         return {"ok": True, "by_group": out}
     except Exception as e:
         return {"ok": False, "error": str(e)}
+
+
+_RUNS: list[dict] = []
+
+
+@router.post("/labs/mlops/log")
+def mlops_log(b: RunIn, u: User = Depends(current_user), db: Session = Depends(get_db)):
+    """Registra un experimento (semilla, parámetros y métricas) — trazabilidad MLOps."""
+    run = {"id": len(_RUNS) + 1, "name": b.name[:100] or "experimento",
+           "params": b.params[:500], "metrics": b.metrics[:500], "user": u.email}
+    _RUNS.append(run)
+    db.add(AuditLog(actor=u.email, action="mlops_log", detail=f"{run['name']}:{run['params']}"))
+    db.commit()
+    return {"ok": True, "run_id": run["id"]}
+
+
+@router.get("/labs/mlops/runs")
+def mlops_runs(db: Session = Depends(get_db)):
+    return _RUNS[-50:]
 
 
 @router.post("/labs/nlp/tokenize")
