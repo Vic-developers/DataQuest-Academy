@@ -1,9 +1,12 @@
 "use client";
 import { useState } from "react";
-import { api } from "@/lib/api";
+import { api, token } from "@/lib/api";
 export default function Cert() {
   const [out, setOut] = useState<any>(null), [code, setCode] = useState("");
-  async function issue() { try { setOut(await api("/api/v1/certificates/issue", { method: "POST", body: "{}" })); } catch { setOut({ error: "Inicia sesión." }); } }
+  async function issue() {
+    if (!token()) { setOut({ error: "Inicia sesión para emitir un certificado." }); return; }
+    try { setOut(await api("/api/v1/certificates/issue", { method: "POST", body: "{}" })); } catch { setOut({ error: "Inicia sesión." }); }
+  }
   async function issueDs() { try { setOut(await api("/api/v1/certificates/ds", { method: "POST", body: "{}" })); } catch (e: any) { setOut({ error: "Requiere >=500 XP y >=10 lecciones. Certificación interna, no oficial." }); } }
   async function verify() { setOut(await api(`/api/v1/certificates/verify/${code}`)); }
   return <section className="mx-auto max-w-md">

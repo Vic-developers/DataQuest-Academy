@@ -5,7 +5,9 @@ from pydantic import BaseModel, EmailStr, Field
 from sqlalchemy.orm import Session
 from app.core.db import get_db
 from app.core.security import hash_password, verify_password, create_token, decode_token
-from app.models.models import User, Profile, World, Lesson, Progress, Exercise, ExerciseAttempt, XPTransaction, Project, ProjectSubmission, Certificate, Mission, Badge, UserBadge
+from datetime import date
+
+from app.models.models import User, Profile, World, Lesson, Progress, Exercise, ExerciseAttempt, XPTransaction, Project, ProjectSubmission, Certificate, Mission, Badge, UserBadge, WorldEval, MissionProgress
 from app.services.gamification import award_xp, level_for_xp, update_streak, XP_LESSON, XP_EXERCISE, XP_EVAL
 from app.services.labs import run_sql, run_python, eval_sheet
 from app.services import tutor as tutor_svc
@@ -74,6 +76,15 @@ class ExerciseIn(BaseModel):
 
 class SheetIn(BaseModel):
     grid: list[list[str]]
+
+
+class EvalIn(BaseModel):
+    answers: list[str] = []
+
+
+class GuidedIn(BaseModel):
+    code: str = ""
+    asserts: str = ""  # asserts visibles, uno por línea
 
 
 class MlIn(BaseModel):
@@ -145,6 +156,16 @@ def current_user(token: str | None = Depends(oauth), db: Session = Depends(get_d
     return u
 
 
+def current_user_optional(token: str | None = Depends(oauth), db: Session = Depends(get_db)) -> User | None:
+    if not token:
+        return None
+    try:
+        email = decode_token(token)
+        return db.query(User).filter(User.email == email).first()
+    except Exception:
+        return None
+
+
 @router.post("/auth/register")
 def register(b: Register, db: Session = Depends(get_db)):
     if db.query(User).filter(User.email == b.email).first():
@@ -172,13 +193,27 @@ def me(u: User = Depends(current_user), db: Session = Depends(get_db)):
 
 
 @router.get("/worlds")
-def worlds(db: Session = Depends(get_db)):
-    return [{"id": w.id, "code": w.code, "title": w.title, "description": w.description} for w in db.query(World).order_by(World.order).all()]
+def worlds(db: Session = Depends(get_db), u: User | None = Depends(current_user_optional)):
+    wl = db.query(World).order_by(World.order).all()
+    done = {r.lesson_id for r in db.query(Progress).filter(Progress.user_id == u.id, Progress.completed == True).all()} if u else set()
+    out, prev_complete = [], True
+    for w in wl:
+        lesson_ids = [l.id for l in db.query(Lesson).filter(Lesson.world_id == w.id).all()]
+        complete = bool(lesson_ids) and all(i in done for i in lesson_ids)
+        out.append({"id": w.id, "code": w.code, "title": w.title, "description": w.description,
+                    "locked": not prev_complete, "complete": complete})
+        prev_complete = prev_complete and complete
+    return out
 
 
 @router.get("/worlds/{world_id}/lessons")
-def lessons(world_id: int, db: Session = Depends(get_db)):
-    return [{"id": l.id, "code": l.code, "title": l.title, "objective": l.objective, "competency": l.competency, "duration": l.duration_min, "status": l.status} for l in db.query(Lesson).filter(Lesson.world_id == world_id).order_by(Lesson.order).all()]
+def lessons(world_id: int, db: Session = Depends(get_db), u: User | None = Depends(current_user_optional)):
+    done = {r.lesson_id for r in db.query(Progress).filter(Progress.user_id == u.id, Progress.completed == True).all()} if u else set()
+    rows = []
+    for l in db.query(Lesson).filter(Lesson.world_id == world_id).order_by(Lesson.order).all():
+        rows.append({"id": l.id, "code": l.code, "title": l.title, "objective": l.objective, "competency": l.competency, "duration": l.duration_min, "status": l.status,
+                     "completed": l.id in done})
+    return rows
 
 
 @router.get("/lessons/{lesson_id}")
@@ -555,6 +590,29 @@ def mission_complete(mission_id: int, u: User = Depends(current_user), db: Sessi
     return {"ok": True, "xp": total, "xp_reward": m.xp}
 
 
+@router.get("/missions/daily")
+def missions_daily(u: User = Depends(current_user), db: Session = Depends(get_db)):
+    today = date.today().isoformat()
+    ms = db.query(Mission).order_by(Mission.id).limit(20).all()
+    if not ms:
+        return []
+    picks = [ms[(hash(today + str(i))) % len(ms)] for i in range(min(2, len(ms)))]
+    return [{"id": m.id, "title": m.title, "description": m.description, "xp": m.xp} for m in picks]
+
+
+@router.post("/missions/daily/{mission_id}/claim")
+def daily_claim(mission_id: int, u: User = Depends(current_user), db: Session = Depends(get_db)):
+    m = db.query(Mission).filter(Mission.id == mission_id).first()
+    if not m:
+        raise HTTPException(404, "Misión no encontrada")
+    today = date.today().isoformat()
+    if db.query(MissionProgress).filter(MissionProgress.user_id == u.id, MissionProgress.mission_id == m.id, MissionProgress.day == today).first():
+        return {"ok": True, "xp": db.query(Profile).filter(Profile.user_id == u.id).first().total_xp, "already": True}
+    db.add(MissionProgress(user_id=u.id, mission_id=m.id, day=today))
+    total, _ = award_xp(db, u.id, m.xp, f"Misión diaria: {m.title}", f"daily:{u.id}:{m.id}:{today}")
+    return {"ok": True, "xp": total}
+
+
 @router.get("/rankings")
 def rankings(db: Session = Depends(get_db)):
     rows = db.query(Profile).order_by(Profile.total_xp.desc()).limit(20).all()
@@ -584,6 +642,71 @@ def admin_stats(u: User = Depends(current_user), db: Session = Depends(get_db)):
             "exercises": db.query(Exercise).count(), "xp_total": db.query(XPTransaction).count(),
             "certificates": db.query(Certificate).count(), "attempts": db.query(ExerciseAttempt).count(),
             "correct_rate": (db.query(ExerciseAttempt).filter(ExerciseAttempt.correct == True).count() / max(db.query(ExerciseAttempt).count(), 1))}
+
+
+@router.get("/resume")
+def resume(u: User = Depends(current_user), db: Session = Depends(get_db)):
+    done = {r.lesson_id for r in db.query(Progress).filter(Progress.user_id == u.id, Progress.completed == True).all()}
+    for w in db.query(World).order_by(World.order).all():
+        for l in db.query(Lesson).filter(Lesson.world_id == w.id).order_by(Lesson.order).all():
+            if l.id not in done:
+                return {"world_id": w.id, "lesson_id": l.id, "code": l.code, "title": l.title}
+    return {"completed_all": True}
+
+
+@router.get("/worlds/{world_id}/evaluation")
+def world_evaluation(world_id: int, db: Session = Depends(get_db)):
+    lesson_ids = [l.id for l in db.query(Lesson).filter(Lesson.world_id == world_id).all()]
+    mcqs = db.query(Exercise).filter(Exercise.lesson_id.in_(lesson_ids), Exercise.kind == "mcq").all() if lesson_ids else []
+    if not mcqs:
+        return {"world_id": world_id, "questions": []}
+    return {"world_id": world_id,
+            "questions": [{"id": e.id, "prompt": e.prompt, "options": json.loads(e.options) if e.options else []} for e in mcqs]}
+
+
+@router.post("/worlds/{world_id}/evaluation")
+def world_evaluation_submit(world_id: int, b: EvalIn, u: User = Depends(current_user), db: Session = Depends(get_db)):
+    lesson_ids = [l.id for l in db.query(Lesson).filter(Lesson.world_id == world_id).all()]
+    mcqs = db.query(Exercise).filter(Exercise.lesson_id.in_(lesson_ids), Exercise.kind == "mcq").all() if lesson_ids else []
+    if not mcqs:
+        return {"ok": False, "error": "Sin preguntas de evaluación en este mundo."}
+    correct = sum(1 for i, e in enumerate(mcqs) if i < len(b.answers) and e.answer and b.answers[i].strip().lower() == e.answer.strip().lower())
+    score = correct / len(mcqs)
+    passed = score >= 0.7
+    ev = db.query(WorldEval).filter(WorldEval.user_id == u.id, WorldEval.world_id == world_id).first()
+    if not ev:
+        ev = WorldEval(user_id=u.id, world_id=world_id, score=score, passed=passed)
+        db.add(ev)
+    else:
+        ev.score = score; ev.passed = passed
+    if passed:
+        award_xp(db, u.id, XP_EVAL, f"Evaluación mundo {world_id}", f"eval:{u.id}:{world_id}")
+    db.commit()
+    return {"ok": True, "score": round(score, 2), "passed": passed}
+
+
+@router.post("/labs/python/check")
+def python_check(b: GuidedIn, u: User = Depends(current_user), db: Session = Depends(get_db)):
+    import tempfile, subprocess, sys, os
+    from pathlib import Path
+    if not b.code.strip():
+        return {"ok": False, "error": "Escribe tu código."}
+    asserts = [x.strip() for x in b.asserts.splitlines() if x.strip()]
+    if not asserts:
+        return {"ok": False, "error": "Indica al menos un assert en el campo 'tests'."}
+    runner = "import sys\n" + b.code + "\n\n" + "\n".join(asserts) + "\n"
+    with tempfile.NamedTemporaryFile("w", suffix=".py", delete=False) as f:
+        f.write(runner); path = f.name
+    env = {"PATH": os.environ.get("PATH", "")}
+    try:
+        r = subprocess.run([sys.executable, "-I", "-s", path], capture_output=True, text=True, timeout=5, env=env)
+        if r.returncode == 0:
+            return {"ok": True, "passed": len(asserts), "total": len(asserts), "output": r.stdout}
+        return {"ok": False, "passed": 0, "total": len(asserts), "error": r.stderr[-2000:] or "assert falló"}
+    except subprocess.TimeoutExpired:
+        return {"ok": False, "error": "Tiempo agotado (5s)"}
+    finally:
+        Path(path).unlink(missing_ok=True)
 
 
 @router.get("/admin/lessons")

@@ -83,6 +83,25 @@ class Progress(Base):
     completed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
 
 
+class WorldEval(Base):
+    __tablename__ = "world_evals"
+    __table_args__ = (UniqueConstraint("user_id", "world_id", name="uq_world_eval"),)
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), index=True)
+    world_id: Mapped[int] = mapped_column(ForeignKey("worlds.id"), index=True)
+    score: Mapped[float] = mapped_column(Float, default=0.0)
+    passed: Mapped[bool] = mapped_column(Boolean, default=False)
+
+
+class MissionProgress(Base):
+    __tablename__ = "mission_progress"
+    __table_args__ = (UniqueConstraint("user_id", "mission_id", "day", name="uq_mission_day"),)
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), index=True)
+    mission_id: Mapped[int] = mapped_column(ForeignKey("missions.id"), index=True)
+    day: Mapped[str] = mapped_column(String(10), index=True)
+
+
 class ExerciseAttempt(Base):
     __tablename__ = "exercise_attempts"
     id: Mapped[int] = mapped_column(primary_key=True)

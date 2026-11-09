@@ -1,7 +1,7 @@
 "use client";
 import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { api } from "@/lib/api";
+import { api, token } from "@/lib/api";
 function LeccionInner() {
   const [lessons, setLessons] = useState<any[]>([]), [detail, setDetail] = useState<any>(null),
         [ans, setAns] = useState(""), [fb, setFb] = useState(""), [msg, setMsg] = useState("");
@@ -9,8 +9,16 @@ function LeccionInner() {
   const wid = params.get("world") ?? "1";
   useEffect(() => { api(`/api/v1/worlds/${wid}/lessons`).then(setLessons).catch(() => {}); }, [wid]);
   async function open(id: number) { setDetail(await api(`/api/v1/lessons/${id}`)); setFb(""); }
-  async function complete() { const r = await api(`/api/v1/lessons/${detail.id}/complete`, { method: "POST", body: "{}" }); setMsg(`Completada. XP total: ${r.xp}`); }
-  async function submitEx(id: number) { const r = await api(`/api/v1/exercises/${id}/submit`, { method: "POST", body: JSON.stringify({ submission: ans }) }); setFb(r.feedback); }
+  async function complete() {
+    if (!token()) { setMsg("Inicia sesión para guardar el progreso. Puedes seguir leyendo sin cuenta."); return; }
+    try { const r = await api(`/api/v1/lessons/${detail.id}/complete`, { method: "POST", body: "{}" }); setMsg(`Completada. XP total: ${r.xp}`); }
+    catch { setMsg("No se pudo guardar el progreso. Inicia sesión para guardar tus avances."); }
+  }
+  async function submitEx(id: number) {
+    if (!token()) { setMsg("Inicia sesión para guardar tu respuesta. Puedes seguir practicando sin cuenta."); return; }
+    try { const r = await api(`/api/v1/exercises/${id}/submit`, { method: "POST", body: JSON.stringify({ submission: ans }) }); setFb(r.feedback); }
+    catch { setFb("No se pudo comprobar. Inicia sesión para guardar tus respuestas."); }
+  }
   return <section>
     <h1 className="text-2xl font-bold">Lecciones</h1>
     <ul className="mt-3 space-y-2">{lessons.map((l: any) => <li key={l.id}><button className="border rounded px-3 py-1" onClick={() => open(l.id)}>{l.title}</button> <span className="text-sm text-slate-500">{l.objective}</span></li>)}</ul>

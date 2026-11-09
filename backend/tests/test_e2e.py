@@ -15,7 +15,7 @@ def test_recorrido_completo_y_editor_admin():
     client.post("/api/v1/auth/register", json={"email": email, "password": "password123"})
     tok = client.post("/api/v1/auth/login", json={"email": email, "password": "password123"}).json()["access_token"]
     H = {"Authorization": f"Bearer {tok}"}
-    worlds = client.get("/api/v1/worlds").json()
+    worlds = client.get("/api/v1/worlds", headers=H).json()
     assert len(worlds) == 23
     assert worlds[-1]["code"] == "mundo-22"
     lessons = client.get(f"/api/v1/worlds/{worlds[0]['id']}/lessons").json()
